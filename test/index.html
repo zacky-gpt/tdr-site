@@ -284,20 +284,24 @@ function expandVariants(code){
 }
 
 function renderVariants(code){
-  const ATLAS = "../atlas/#";  // ← これに変更！
+  // リポジトリ固定版
+  const ATLAS = "/tdr-site/atlas/#";
+
   const list = expandVariants(code);
   const html = list.map(c=>{
     const ie=c[0], t=c[2], d=c[3], r=c[4];
     const title=titleFromLetters(ie,t,d,r);
     const desc=descFromLetters(ie,t,d,r);
     const href = `${ATLAS}${c}`;
+
     return `
       <a class="vcard" href="${href}" target="_blank" rel="noopener">
         <div class="vtitle">${title} <span class="vcode">${c}</span></div>
-        <div class="vdesc">${desc}</div>
+        <div style="color:#cbd5e1;font-size:13px">${desc}</div>
       </a>
     `;
   }).join("");
+
   document.getElementById("variants").innerHTML = html;
 }
 
