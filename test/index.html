@@ -304,23 +304,45 @@ function renderVariants(code){
   document.getElementById("variants").innerHTML = html;
 }
   
+// これで既存の renderVariants を丸ごと置き換え
 function renderVariants(code){
-  const list = expandVariants(code);
-  const html = list.map(c=>{
-    const title = titleFromLetters(c[0],c[2],c[3],c[4]);
-    const desc  = descFromLetters(c[0],c[2],c[3],c[4]);
+  // 1) ここでリンク先のベースを決める
+  //    どれか1つを残して他はコメントアウトにしてね。
+  // const ATLAS = "../atlas/#";                          // test/ から 1つ上 → atlas/
+  // const ATLAS = "/tdr-site/atlas/#";                   // リポジトリ固定の絶対パス（確実）
+  const ATLAS = "https://zacky-gpt.github.io/tdr-site/atlas/#";  // 本番URL直指定（最も確実）
 
-    // とりあえずリンクは "#" にして様子を見る
-    return `
-      <a class="vcard" href="#" target="_blank" rel="noopener">
-        <div class="vtitle">${title} <span class="vcode">${c}</span></div>
-        <div style="color:#cbd5e1;font-size:13px">${desc}</div>
-      </a>
-    `;
-  }).join("");
+  try{
+    const variants = expandVariants(code);           // 例: "M-MMM" → 16通り
+    if(!variants || !variants.length){
+      document.getElementById("variants").innerHTML =
+        `<div class="foot">表示できるパターンがありません（code=${code}）。</div>`;
+      return;
+    }
 
-  document.getElementById("variants").innerHTML = html;
+    const html = variants.map(c=>{
+      const ie=c[0], t=c[2], d=c[3], r=c[4];
+      const title = titleFromLetters(ie,t,d,r);
+      const desc  = descFromLetters(ie,t,d,r);
+      const href  = `${ATLAS}${c}`;
+
+      return `
+        <a class="vcard" href="${href}" target="_blank" rel="noopener">
+          <div class="vtitle">${title} <span class="vcode">${c}</span></div>
+          <div style="color:#cbd5e1;font-size:13px">${desc}</div>
+        </a>
+      `;
+    }).join("");
+
+    document.getElementById("variants").innerHTML = html;
+  }catch(err){
+    // 画面にも出す（コンソール見なくても分かるように）
+    document.getElementById("variants").innerHTML =
+      `<div class="foot">カード描画エラー：${String(err)}</div>`;
+    console.error("renderVariants error:", err, {code});
+  }
 }
+
 
 function arch([ie,t,d,r]){
   const dir=ie<=2.3?"内向基調で":ie>=3.7?"外向基調で":"中間基調で";
