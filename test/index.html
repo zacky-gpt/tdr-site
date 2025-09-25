@@ -45,9 +45,23 @@
   .range input[type="range"]{width:100%}
   .bubble{min-width:3ch;text-align:right;font-variant-numeric:tabular-nums;color:#cbd5e1}
   .scale{display:flex;justify-content:space-between;font-size:11px;color:#9aa4b2;margin-top:4px}
-  .vcard{display:block;background:#1e293b;border:1px solid #334155;border-radius:8px;
-       padding:12px;text-decoration:none;color:inherit;transition:.2s}
-  .vcard:hover{border-color:#7dd3fc;background:#0f172a}
+  /* style の一番下に追記 */
+.vcard{
+  display:block;
+  background:#ffffff08;
+  border:1px solid #ffffff20;
+  border-radius:10px;
+  padding:10px;
+  margin:0;            /* gridのgapで間隔は足りてる */
+  text-decoration:none;
+  color:inherit;
+  transition:background .2s, border-color .2s;
+}
+.vcard:hover{
+  background:#0f172a;
+  border-color:#7dd3fc;
+}
+
 </style>
 </head>
 <body>
@@ -285,29 +299,52 @@ function renderVariants(code){
 }
   
 function renderVariants(code){
-  // 1) クリック先のベースURLを決める
-  //    迷ったら本番URL直書きが確実。相対で行くなら行頭の1行だけ残して他はコメントアウト。
-  // const BASE = "../atlas/#";                                // test/ 配下から 1つ上の atlas/ に飛ばす
-  // const BASE = "/tdr-site/atlas/#";                         // リポジトリ固定の絶対パス
-  const BASE = "https://zacky-gpt.github.io/tdr-site/atlas/#"; // 公開URL直指定（最も確実）
+  // クリック先：まずは確実な公開URL直書き。相対で行くならこの1行を変えるだけ。
+  const BASE = "https://zacky-gpt.github.io/tdr-site/atlas/#";
 
-  const list = expandVariants(code); // 例: "M-MMM" → 最大16通り
-  console.log("variants:", list, "code:", code);
-  const html = list.map(c=>{
-    const ie=c[0], t=c[2], d=c[3], r=c[4];
-    const title = titleFromLetters(ie,t,d,r);
-    const desc  = descFromLetters(ie,t,d,r);
-    const href  = `${BASE}${c}`;
-    return `
-      <a class="vcard" href="${href}" target="_blank" rel="noopener">
-        <div class="vtitle">${title} <span class="vcode">${c}</span></div>
-        <div style="color:#cbd5e1;font-size:13px">${desc}</div>
-      </a>
-    `;
-  }).join("");
+  try{
+    const container = document.getElementById("variants");
+    if(!container){
+      console.warn("variants container not found");
+      return;
+    }
 
-  document.getElementById("variants").innerHTML = html;
+    // 展開（Mがあれば両側、なければ1通り）
+    const list = expandVariants(code);
+
+    // 念のためフォールバック：空配列なら自分自身だけは出す
+    const safeList = (list && list.length) ? list : [code];
+
+    // カードHTMLを作成
+    const html = safeList.map(c=>{
+      const ie=c[0], t=c[2], d=c[3], r=c[4];
+      const title = titleFromLetters(ie,t,d,r) || "タイプ";
+      const desc  = descFromLetters(ie,t,d,r)  || "説明を取得できませんでした。";
+      const href  = `${BASE}${c}`;
+      return `
+        <a class="vcard" href="${href}" target="_blank" rel="noopener">
+          <div class="vtitle">${title} <span class="vcode">${c}</span></div>
+          <div style="color:#cbd5e1;font-size:13px">${desc}</div>
+        </a>
+      `;
+    }).join("");
+
+    container.innerHTML = html;
+
+    // デバッグ表示（必要なときだけ残してOK）
+    // container.insertAdjacentHTML("beforeend",
+    //   `<div class="foot">debug: code=${code} / variants=${safeList.length}</div>`);
+
+  }catch(err){
+    const container = document.getElementById("variants");
+    if(container){
+      container.innerHTML =
+        `<div class="foot">カード描画エラー：${String(err)}</div>`;
+    }
+    console.error("renderVariants error:", err, {code});
   }
+}
+
 
 
 function arch([ie,t,d,r]){
