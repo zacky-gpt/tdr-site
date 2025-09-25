@@ -37,58 +37,95 @@
 
 <script>
 (async function(){
-  // ここのパスは types.json の配置に合わせて調整：/atlas/ から見て ../data/
-  const res = await fetch("../data/types.json");
-  const types = await res.json();
+  const MSG = (txt)=>{ 
+    document.getElementById("grid").innerHTML = `<div class="sub">${txt}</div>`; 
+  };
 
-  // 一覧（チップ）
-  const grid = document.getElementById("grid");
-  grid.innerHTML = types.map(t => 
-    `<a class="chip" href="#${t.code}">${t.code}</a>`
-  ).join("");
+  try {
+    // ここは types.json の実位置に合わせて
+    const url = "../data/types.json";
+    const res = await fetch(url, {cache:"no-store"});
+    if(!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+    const raw = await res.json();
 
-  // 詳細
-  const details = document.getElementById("details");
-  details.innerHTML = types.map(t => {
-    const adj = t.adjust || {};
-    const tags = t.tags ? t.tags.map(x=>`<span class="tag">${x}</span>`).join("") : "";
-    return `
-      <section id="${t.code}" class="card">
-        <div class="sect">
-          <div style="font-size:18px;font-weight:800">${t.name} <span class="code">(${t.code})</span></div>
-          <div class="tags">${tags}</div>
-        </div>
-        <p style="margin-top:8px">${t.desc || t.description || ""}</p>
-        <div style="font-weight:700;margin-top:8px">逆方向調整</div>
-        <ul style="margin:6px 0 0 18px">
-          <li>I/E：${adj["I/E"] ?? "-"}</li>
-          <li>T（H/C）：${adj["H/C"] ?? "-"}</li>
-          <li>D（D/S）：${adj["D/S"] ?? "-"}</li>
-          <li>R（R/F）：${adj["R/F"] ?? "-"}</li>
-        </ul>
-      </section>
-    `;
-  }).join("");
+    // 配列でもオブジェクトでも受け取れるように正規化
+    let types;
+    if (Array.isArray(raw)) {
+      types = raw;
+    } else if (Array.isArray(raw.items)) {
+      types = raw.items;
+    } else {
+      // { "E-HDR": {...}, ... } 形式なら値を配列化
+      types = Object.values(raw);
+    }
 
-  // ハッシュ着地があればスクロール
-  if (location.hash) {
-    const el = document.querySelector(location.hash);
-    el && el.scrollIntoView({behavior:"smooth", block:"start"});
-  }
+    if (!Array.isArray(types) || types.length === 0) {
+      MSG("types.json は読み込めましたが、配列が空でした。構造を確認してください。");
+      console.warn("raw:", raw);
+      return;
+    }
 
-  // 内部リンククリック時もスムーススクロール
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener("click", e=>{
-      const id = a.getAttribute("href");
-      const el = document.querySelector(id);
-      if(el){
-        e.preventDefault();
-        history.replaceState(null,"",id);
-        el.scrollIntoView({behavior:"smooth", block:"start"});
-      }
+    // ソート（code を想定・なければ name）
+    types.sort((a,b)=>(a.code||a.name).localeCompare(b.code||b.name));
+
+    // 一覧（チップ）
+    const grid = document.getElementById("grid");
+    grid.innerHTML = types.map(t => 
+      `<a class="chip" href="#${t.code||t.id}">${t.code||t.id}</a>`
+    ).join("");
+
+    // 詳細
+    const details = document.getElementById("details");
+    details.innerHTML = types.map(t => {
+      const code = t.code || t.id || "UNKNOWN";
+      const name = t.name || "名称未設定";
+      const desc = t.desc || t.description || "";
+      const adj  = t.adjust || {};
+      const tags = t.tags ? t.tags.map(x=>`<span class="tag">${x}</span>`).join("") : "";
+      return `
+        <section id="${code}" class="card">
+          <div class="sect">
+            <div style="font-size:18px;font-weight:800">${name} <span class="code">(${code})</span></div>
+            <div class="tags">${tags}</div>
+          </div>
+          <p style="margin-top:8px">${desc}</p>
+          <div style="font-weight:700;margin-top:8px">逆方向調整</div>
+          <ul style="margin:6px 0 0 18px">
+            <li>I/E：${adj["I/E"] ?? "-"}</li>
+            <li>T（H/C）：${adj["H/C"] ?? "-"}</li>
+            <li>D（D/S）：${adj["D/S"] ?? "-"}</li>
+            <li>R（R/F）：${adj["R/F"] ?? "-"}</li>
+          </ul>
+        </section>
+      `;
+    }).join("");
+
+    // ハッシュ着地があればスクロール
+    if (location.hash) {
+      const el = document.querySelector(location.hash);
+      el && el.scrollIntoView({behavior:"smooth", block:"start"});
+    }
+
+    // 内部リンクもスムースに
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener("click", e=>{
+        const id = a.getAttribute("href");
+        const el = document.querySelector(id);
+        if(el){
+          e.preventDefault();
+          history.replaceState(null,"",id);
+          el.scrollIntoView({behavior:"smooth", block:"start"});
+        }
+      });
     });
-  });
+
+    console.log(`Loaded types: ${types.length}`, types);
+  } catch (err) {
+    MSG(`読み込み失敗：${String(err)}`);
+    console.error(err);
+  }
 })();
 </script>
+
 </body>
 </html>
