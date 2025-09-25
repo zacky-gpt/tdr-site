@@ -18,7 +18,15 @@
   .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
   .tag{font-size:12px;padding:3px 8px;border-radius:999px;background:#ffffff10;border:1px solid #ffffff20}
   .foot{color:#9aa4b2;font-size:12px;margin-top:8px}
-  .toplink{position:fixed;right:14px;bottom:14px;background:#7dd3fc;color:#081019;border:none;border-radius:999px;padding:10px 14px;font-weight:800;cursor:pointer}
+  .toplink{
+    position:fixed;right:14px;bottom:14px;
+  z-index:9999;              /* ←最前面へ */
+  background:#7dd3fc;color:#081019;border:none;border-radius:999px;
+  padding:10px 14px;font-weight:800;cursor:pointer;
+  opacity:0; pointer-events:none; transition:opacity .2s;
+  }
+.toplink.show{ opacity:1; pointer-events:auto; }
+
 </style>
 </head>
 <body>
@@ -33,7 +41,7 @@
   <div class="foot">データはブラウザ内で読み込みます（<code>../data/types.json</code>）。</div>
 </div>
 
-<button class="toplink" onclick="scrollTo({top:0,behavior:'smooth'})">▲ TOP</button>
+<button type="button" id="toTop" class="toplink">▲ TOP</button>
 
 <script>
 (async function(){
@@ -125,6 +133,26 @@
     console.error(err);
   }
 })();
+
+  // …既存の即時関数の下でもOK
+  (function(){
+    const btn = document.getElementById('toTop');
+    // どっちがスクロール親でも効くように保険をかける
+    function toTopSmooth(){
+      try{ window.scrollTo({top:0, behavior:'smooth'}); }catch(e){}
+      try{ document.documentElement.scrollTo({top:0, behavior:'smooth'}); }catch(e){}
+      try{ document.body.scrollTo({top:0, behavior:'smooth'}); }catch(e){}
+    }
+    btn.addEventListener('click', toTopSmooth);
+
+    // スクロール量で表示/非表示
+    function onScroll(){
+      const y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      if(y > 400) btn.classList.add('show'); else btn.classList.remove('show');
+    }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll(); // 初期評価
+  })();
 </script>
 
 </body>
