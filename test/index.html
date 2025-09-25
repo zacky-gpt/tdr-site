@@ -357,7 +357,7 @@ function renderResult(center, range, muMap){
   const atlasBase = "../atlas/#"; // パス調整
   document.getElementById("code").innerHTML =
     `<a href="${atlasBase}${code}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${code}</a>`;
-
+    renderVariants(code);
 
   const widths = vals.map(v=>((v-1)/4*100));
   const ids=["b0","b1","b2","b3"];
