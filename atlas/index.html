@@ -1,0 +1,83 @@
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TDR 16分類図鑑</title>
+<style>
+body{margin:0;background:#0f1115;color:#e8ecf1;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.card{background:#171a21;border:1px solid #ffffff20;border-radius:12px;padding:12px}
+code{font-family:ui-monospace,Menlo,monospace}
+.top{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+input{padding:8px;border:none;border-radius:8px;width:220px}
+.btn{padding:8px 12px;border:none;border-radius:8px;background:#7dd3fc;color:#081019;font-weight:700;cursor:pointer}
+.small{color:#9aa4b2;font-size:12px}
+.toggle{margin-left:auto;display:flex;align-items:center;gap:6px}
+</style></head><body><div class="wrap">
+  <h1>TDR 16分類図鑑</h1>
+  <div class="top">
+    <input id="code" placeholder="例: E-HDR / I-CSF">
+    <button class="btn" onclick="jump()">表示</button>
+    <span class="small">または下のカードをクリック</span>
+    <label class="toggle"><input type="checkbox" id="ja"> 漢字表記</label>
+  </div>
+  <div id="list" class="grid"></div>
+  <div id="view"></div>
+<script>
+let DB={}, JA=false;
+const LABELS = {
+  en: {I:"Introvert",E:"Extravert",H:"Hot",C:"Cool",D:"Deep",S:"Shallow",R:"Rigid",F:"Flexible"},
+  ja: {I:"内向",E:"外向",H:"熱",C:"冷",D:"深",S:"浅",R:"硬",F:"柔"}
+};
+fetch("../data/types.json").then(r=>r.json()).then(d=>{DB=d; renderList(); fromQuery()});
+document.getElementById('ja').onchange = e=>{ JA=e.target.checked; renderList(); fromQuery(true); };
+
+function renderList(){
+  const list=document.getElementById('list');
+  const keys=Object.keys(DB).sort();
+  list.innerHTML = keys.map(k=>{
+    const t=DB[k];
+    return `<div class="card" onclick="show('${k}')">
+      <div style="font-weight:700">${t.title} <span class="small"><code>${k}</code></span></div>
+      <div class="small">${t.tags.join(" / ")}</div>
+    </div>`;
+  }).join("");
+}
+
+function labelsFor(code){
+  const L = JA? LABELS.ja : LABELS.en;
+  return `${L[code[0]]}／${L[code[2]]}-${L[code[3]]}-${L[code[4]]}`;
+}
+
+function show(code){
+  const t = DB[code]; if(!t){ alert(`コード ${code} は未登録`); return; }
+  const L = JA? LABELS.ja : LABELS.en;
+  const adj = t.adjust;
+  const view=document.getElementById('view');
+  view.innerHTML = `<div class="card" style="margin-top:10px">
+    <div style="font-weight:700;font-size:18px">${t.title} <span class="small"><code>${code}</code></span></div>
+    <div class="small" style="margin:6px 0">${labelsFor(code)}</div>
+    <p>${t.desc}</p>
+    <div class="small">反対方向への調整ポイント</div>
+    <ul>
+      <li>I/E：${adj.IE}</li>
+      <li>T：${adj.T}</li>
+      <li>D：${adj.D}</li>
+      <li>R：${adj.R}</li>
+    </ul>
+  </div>`;
+  history.replaceState(null,"",`?code=${encodeURIComponent(code)}&ja=${JA?1:0}`);
+}
+
+function jump(){
+  const code=document.getElementById('code').value.trim().toUpperCase();
+  if(code) show(code);
+}
+
+function fromQuery(force){
+  const q=new URLSearchParams(location.search);
+  const code=q.get('code'); const j=q.get('ja');
+  if(j && !force){ document.getElementById('ja').checked = (j==='1'); JA = (j==='1'); }
+  if(code){ show(code); }
+}
+</script>
+</div></body></html>
