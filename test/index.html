@@ -269,7 +269,7 @@ function expandVariants(code){
 }
 
 function renderVariants(code){
-  const ATLAS = "atlas/#"; // ←パスは環境に合わせて "./atlas/#" でも "../atlas/#" でもOK
+  const ATLAS = "../atlas/#"; // ←パスは環境に合わせて "./atlas/#" でも "../atlas/#" でもOK
 
   const list = expandVariants(code);
   const html = list.map(c=>{
