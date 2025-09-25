@@ -283,15 +283,13 @@ function expandVariants(code){
 }
 
 function renderVariants(code){
-  const ATLAS = "../atlas/#"; // ←相対パスは環境に合わせて変更してね
-
+  const ATLAS = "../atlas/#";  // ← これに変更！
   const list = expandVariants(code);
   const html = list.map(c=>{
     const ie=c[0], t=c[2], d=c[3], r=c[4];
     const title=titleFromLetters(ie,t,d,r);
     const desc=descFromLetters(ie,t,d,r);
     const href = `${ATLAS}${c}`;
-
     return `
       <a class="vcard" href="${href}" target="_blank" rel="noopener">
         <div class="vtitle">${title} <span class="vcode">${c}</span></div>
@@ -299,9 +297,9 @@ function renderVariants(code){
       </a>
     `;
   }).join("");
-
   document.getElementById("variants").innerHTML = html;
 }
+
 
 function arch([ie,t,d,r]){
   const dir=ie<=2.3?"内向基調で":ie>=3.7?"外向基調で":"中間基調で";
