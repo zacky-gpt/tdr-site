@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>魂読4軸 診断テスト 3ステップ（TDR版 multi beta｜0–100スライダー）</title>
+<style>
+  body{margin:0;background:#0f1115;color:#e8ecf1;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","Helvetica Neue",Arial,sans-serif;line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding:16px}
+  .card{background:#171a21;border:1px solid #ffffff20;border-radius:12px;padding:16px;margin:10px 0}
+  h1{font-size:20px;margin:0 0 4px}
+  .sub{color:#9aa4b2;font-size:13px}
+  .q{margin:10px 0;padding:10px;border-radius:10px;background:#ffffff0a;border:1px solid #ffffff22}
+  .btn{appearance:none;border:none;background:#7dd3fc;color:#081019;font-weight:700;padding:10px 14px;border-radius:10px;cursor:pointer}
+  .btn.sec{background:#a78bfa;color:#081019}
+  .btn.ghost{background:transparent;color:#e8ecf1;border:1px solid #ffffff35}
+  .grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:14px}
+  @media (max-width:1000px){.grid{grid-template-columns:1fr}}
+  .row{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin:8px 0}
+  .label{color:#cdd4dd;font-size:13px}
+  .barwrap{height:16px;background:#ffffff12;border-radius:10px;overflow:hidden;border:1px solid #ffffff22}
+  .bar{height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#22d3ee)}
+  .bar.t{background:linear-gradient(90deg,#f472b6,#fb7185)}
+  .bar.d{background:linear-gradient(90deg,#34d399,#10b981)}
+  .bar.r{background:linear-gradient(90deg,#fbbf24,#f59e0b)}
+  .rng{position:relative;height:4px;margin-top:4px;background:#ffffff14;border-radius:999px}
+  .rng>span{position:absolute;top:0;bottom:0;border-radius:999px;background:#ffffff60}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .tag{padding:4px 8px;border-radius:8px;background:#ffffff10;border:1px solid #ffffff20;font-size:12px}
+  .num{font-variant-numeric:tabular-nums}
+  .stepper{display:flex;gap:6px;margin:10px 0}
+  .dot{height:8px;width:100%;background:#ffffff20;border-radius:99px;overflow:hidden}
+  .dot>span{display:block;height:100%;width:0;background:#7dd3fc}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .foot{color:#9aa4b2;font-size:12px;margin-top:6px}
+  .hidden{display:none !important}
+  .codebox{display:flex;align-items:center;gap:10px;margin:6px 0 0}
+  .code{font-weight:800;letter-spacing:1px;background:#ffffff12;border:1px solid #ffffff25;border-radius:10px;padding:6px 10px}
+  .variants{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+  @media (max-width:800px){.variants{grid-template-columns:1fr}}
+  .vcard{background:#ffffff08;border:1px solid #ffffff20;border-radius:10px;padding:10px;cursor:pointer}
+  .vtitle{font-weight:700;margin-bottom:4px}
+  .vcode{font-family:ui-monospace,Menlo,monospace;font-weight:700}
+  /* スライダー */
+  .range{display:flex;align-items:center;gap:10px;margin-top:8px}
+  .range input[type="range"]{width:100%}
+  .bubble{min-width:3ch;text-align:right;font-variant-numeric:tabular-nums;color:#cbd5e1}
+  .scale{display:flex;justify-content:space-between;font-size:11px;color:#9aa4b2;margin-top:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>魂読4軸 診断テスト 3ステップ（TDR版 multi beta｜0–100スライダー）</h1>
+  <div class="sub">全30問。I/E（内外）＋ T（温度：Hot/Cool）＋ D（深さ：Deep/Shallow）＋ R（硬さ：Rigid/Flexible）。中庸（M）がある軸は、両側の可能性パターンも同時に表示します（最大16個）。中央値50を基準に中心と可動域を推定します。</div>
+  <div class="stepper"><div class="dot"><span id="prog"></span></div><div class="foot" id="pcl" style="min-width:120px;text-align:right"></div></div>
+  <div class="grid">
+    <section class="card">
+      <form id="quiz"></form>
+      <div class="toolbar">
+        <button class="btn ghost" type="button" id="backBtn">戻る</button>
+        <button class="btn" type="button" id="nextBtn">次へ</button>
+        <button class="btn sec hidden" type="button" id="finishBtn">診断結果を見る</button>
+      </div>
+      <div class="foot">スライダーは0（当てはまらない）〜100（とても当てはまる）。未操作は50として扱います。</div>
+    </section>
+    <aside class="card">
+      <div id="title" style="font-weight:700;margin-bottom:6px">結果：未診断</div>
+      <div class="codebox"><div>コード</div><div id="code" class="code">-</div></div>
+      <div id="desc" style="color:#d1d5db;font-size:14px"></div>
+      <div class="tags" id="tags"></div>
+      <div style="height:1px;background:#ffffff30;margin:10px 10px"></div>
+      <div class="row"><div class="label">I/E（内外）</div><div><div class="barwrap"><div id="b0" class="bar"></div></div><div class="rng"><span id="rg0" style="left:0;width:0"></span></div><div style="font-size:12px;color:#9aa4b2">中心 <span id="n0" class="num">-</span> / 範囲 <span id="r0" class="num">-</span></div></div></div>
+      <div class="row"><div class="label">T：温度（Temperature）C/H</div><div><div class="barwrap"><div id="b1" class="bar t"></div></div><div class="rng"><span id="rg1" style="left:0;width:0"></span></div><div style="font-size:12px;color:#9aa4b2">中心 <span id="n1" class="num">-</span> / 範囲 <span id="r1" class="num">-</span></div></div></div>
+      <div class="row"><div class="label">D：深さ（Depth）S/D</div><div><div class="barwrap"><div id="b2" class="bar d"></div></div><div class="rng"><span id="rg2" style="left:0;width:0"></span></div><div style="font-size:12px;color:#9aa4b2">中心 <span id="n2" class="num">-</span> / 範囲 <span id="r2" class="num">-</span></div></div></div>
+      <div class="row"><div class="label">R：硬さ（Rigidity）F/R</div><div><div class="barwrap"><div id="b3" class="bar r"></div></div><div class="rng"><span id="rg3" style="left:0;width:0"></span></div><div style="font-size:12px;color:#9aa4b2">中心 <span id="n3" class="num">-</span> / 範囲 <span id="r3" class="num">-</span></div></div></div>
+      <div style="height:1px;background:#ffffff30;margin:10px 10px"></div>
+      <div style="font-weight:700">中庸軸の両側パターン</div>
+      <div id="variants" class="variants"></div>
+      <div class="foot">注：本診断はオリジナルの価値回路モデルです。MBTI等の公式ツールではありません。</div>
+    </aside>
+  </div>
+</div>
+<script>
+// 30問（TDRに対応）
+const Q = [
+  {t:"急な誘いでも、あまり考えずに参加する。",w:{ie:0.7,t:0.3},rev:false},
+  {t:"人前で話すことにワクワクする。",w:{ie:0.7,r:0.3},rev:false},
+  {t:"新しい場所では、様子を見てから動く。",w:{ie:0.7,d:0.3},rev:true},
+  {t:"目立つ役割を自分から買って出る。",w:{ie:0.7,t:0.3},rev:false},
+  {t:"初対面の人とすぐ打ち解けられる。",w:{ie:0.7,r:0.3},rev:false},
+  {t:"小さな集まりよりも大勢のイベントを好む。",w:{ie:0.7,t:0.3},rev:false},
+  {t:"誰かが困っているとき、ためらわず声をかける。",w:{t:0.7,ie:0.3},rev:false},
+  {t:"自分から助けを求めるのは得意だ。",w:{ie:0.7,r:0.3},rev:false},
+  {t:"パーティや飲み会より、静かな趣味の時間を選ぶことが多い。",w:{ie:0.7,d:0.3},rev:true},
+  {t:"人と関わらずに一日過ごしても疲れない。",w:{ie:0.7,d:0.3},rev:true},
+  {t:"感動的な映画で涙が出やすい。",w:{t:0.7,r:0.3},rev:false},
+  {t:"自分の意見を感情的にぶつけてしまうことがある。",w:{t:0.7,ie:0.3},rev:false},
+  {t:"誰かを励ますとき、ユーモアを交える。",w:{t:0.7,r:0.3},rev:false},
+  {t:"喜びや怒りを顔に出さずにコントロールできる。",w:{r:0.7,d:0.3},rev:false},
+  {t:"衝突を避けるために感情を抑えがちだ。",w:{ie:0.7,r:0.3},rev:true},
+  {t:"盛り上がった空気にすぐ影響される。",w:{t:0.7,d:0.3},rev:false},
+  {t:"感情を表に出すより、文章や作品で表す方が楽だ。",w:{ie:0.7,d:0.3},rev:true},
+  {t:"困っている友人を見ると、自分も胸が痛む。",w:{t:0.7,ie:0.3},rev:false},
+  {t:"感情より論理を優先する。",w:{r:0.7,d:0.3},rev:false},
+  {t:"緊張する場面でも冷静さを保てる。",w:{r:0.7,d:0.3},rev:false},
+  {t:"計画を立てず、流れに任せて動くのが好きだ。",w:{r:0.7,d:0.3},rev:true},
+  {t:"複雑な問題でも原理や構造を掘って理解したい。",w:{d:0.7,r:0.3},rev:false},
+  {t:"細部まで正確に仕上げることを重視する。",w:{r:0.7,d:0.3},rev:false},
+  {t:"完璧さよりスピードを優先する。",w:{r:0.7,ie:0.3},rev:true},
+  {t:"新しいことを始める前に、リスクと利点を慎重に天秤にかける。",w:{d:0.7,r:0.3},rev:false},
+  {t:"規則よりもその場の判断を優先する。",w:{r:0.7,t:0.3},rev:true},
+  {t:"失敗しても、すぐ切り替えて次を試す。",w:{d:0.7,t:0.3},rev:true},
+  {t:"自分の信じるルールを、周囲に合わせず貫く。",w:{r:0.7,ie:0.3},rev:false},
+  {t:"課題をじっくり熟考するのが好きだ。",w:{d:0.7,ie:0.3},rev:false},
+  {t:"実験的なやり方を試すことを恐れない。",w:{ie:0.7,d:0.3},rev:false},
+];
+
+const PER_PAGE = 10;
+let page = 0;
+const answers = new Array(Q.length).fill(null);
+const quiz = document.getElementById("quiz");
+const backBtn = document.getElementById("backBtn");
+const nextBtn = document.getElementById("nextBtn");
+const finishBtn = document.getElementById("finishBtn");
+const prog = document.getElementById("prog");
+const pcl = document.getElementById("pcl");
+
+function renderPage(){
+  const start = page*PER_PAGE;
+  const slice = Q.slice(start, start+PER_PAGE);
+  quiz.innerHTML = slice.map((q,i)=>{
+    const idx = start + i;
+    const v = answers[idx] ?? 50;
+    return `
+      <div class="q">
+        <div>${idx+1}. ${q.t}</div>
+        <div class="range">
+          <input type="range" min="0" max="100" step="1"
+                 value="${v}" oninput="setAns(${idx},this.valueAsNumber)">
+          <span class="bubble" id="bubble${idx}">${v}</span>
+        </div>
+        <div class="scale"><span>0</span><span>50</span><span>100</span></div>
+      </div>`;
+  }).join("");
+
+  backBtn.disabled = (page===0);
+  nextBtn.classList.toggle("hidden", page===2);
+  finishBtn.classList.toggle("hidden", page!==2);
+
+  const done = answers.filter(v=>v!==null).length;
+  prog.style.width = (done / Q.length * 100) + "%";
+  pcl.textContent = `${done}/${Q.length}`;
+}
+
+window.setAns = function(idx, v){
+  answers[idx] = v;
+  const b = document.getElementById(`bubble${idx}`);
+  if(b) b.textContent = v;
+};
+
+backBtn.onclick = ()=>{ if(page>0){ page--; renderPage(); window.scrollTo({top:0,behavior:"smooth"});} };
+nextBtn.onclick = ()=>{ if(page<2){ page++; renderPage(); window.scrollTo({top:0,behavior:"smooth"});} };
+finishBtn.onclick = ()=>{ run(); window.scrollTo({top:0,behavior:"smooth"}); };
+
+// ---- ここから集計（中央値50ベース） ----
+function median(arr){
+  if(arr.length===0) return 0;
+  const s=[...arr].sort((a,b)=>a-b);
+  const m=Math.floor(s.length/2);
+  return s.length%2? s[m] : (s[m-1]+s[m])/2;
+}
+
+// μ判定ヘルパ（0..100）
+function letterFromMu(mu){ const lo=42.5, hi=57.5; return mu>=hi?1:mu<=lo?-1:0; }
+function toIE(mu){ const s=letterFromMu(mu); return s===1?'E':s===-1?'I':'M'; }
+function toT (mu){ const s=letterFromMu(mu); return s===1?'H':s===-1?'C':'M'; }
+function toD (mu){ const s=letterFromMu(mu); return s===1?'D':s===-1?'S':'M'; }
+function toR (mu){ const s=letterFromMu(mu); return s===1?'R':s===-1?'F':'M'; }
+
+function run(){
+  const ans = Q.map((_,i)=> answers[i]===null ? 50 : answers[i]);
+  const axes=["ie","t","d","r"];
+  const raw={ie:[],t:[],d:[],r:[]};
+  const sum={ie:0,t:0,d:0,r:0};
+  const cnt={ie:0,t:0,d:0,r:0};
+
+  ans.forEach((r,i)=>{
+    const q=Q[i];
+    const centered = (r - 50);
+    const signed = q.rev ? -centered : centered;
+    for(const ax in q.w){
+      const w=q.w[ax];
+      const val = signed * w;
+      raw[ax].push(val);
+      sum[ax]+=val;
+      cnt[ax]+=Math.abs(w);
+    }
+  });
+
+  const center={}, centerMu={}, range={};
+  axes.forEach(ax=>{
+    const xs = raw[ax].length ? raw[ax] : [0];
+    const mu_raw = 50 + (sum[ax]/(cnt[ax]||1));
+    const n = xs.length, lambda = n/(n+6);
+    const mu = 50 + lambda*(mu_raw-50);
+    centerMu[ax]=mu;
+
+    const med = median(xs);
+    const mad = median(xs.map(v=>Math.abs(v-med)));
+    const sigma = 1.4826*(mad||0);
+    const k=1.0;
+    const L = Math.max(20, Math.min(80, mu - k*sigma));
+    const U = Math.max(20, Math.min(80, mu + k*sigma));
+
+    const muClamped = Math.max(40, Math.min(60, mu));
+    const ui = 2 + ((muClamped-40)/20)*2;       // 2..4
+    center[ax] = ui;
+
+    const spanUi = Math.max(0.1, Math.min(1.0, (U - L) / 40));
+    range[ax] = spanUi;
+  });
+
+  renderResult(center, range, centerMu);
+}
+
+// ラベル（UI帯2〜4の見た目用：タイトル生成は従来判定でOK）
+function labelIE(v){ if (v <= 2.3) return "I"; if (v >= 3.7) return "E"; return "M"; }
+function labelT(v){ if (v <= 2.3) return "C"; if (v >= 3.7) return "H"; return "M"; }
+function labelD(v){ if (v <= 2.3) return "S"; if (v >= 3.7) return "D"; return "M"; }
+function labelR(v){ if (v <= 2.3) return "F"; if (v >= 3.7) return "R"; return "M"; }
+
+function titleFromLetters(ie,t,d,r){
+  if (ie==="E"&&t==="H"&&d==="D") return "灼熱の旗手";
+  if (ie==="E"&&t==="H"&&d==="S") return "奔流の開拓者";
+  if (ie==="I"&&t==="C"&&d==="D"&&r==="R") return "静謐の守護者";
+  if (ie==="I"&&t==="C"&&d==="D") return "冷き深海の思索者";
+  if (t==="C"&&r==="F") return "しなる風の調停者";
+  if (d==="D"&&r==="F") return "柔らかな賢者";
+  if (d==="S"&&r==="R") return "鋭刃のスプリンター";
+  return "中庸の航海者";
+}
+function descFromLetters(ie,t,d,r){
+  const dir = ie==="I"?"内向基調で":ie==="E"?"外向基調で":"中間基調で";
+  const temp = t==="H"?"高温、":t==="C"?"低温、":"中温、";
+  const deep = d==="D"?"深く、":d==="S"?"浅く、":"中深で、";
+  const hard = r==="R"?"構造的。":r==="F"?"柔軟。":"中硬。";
+  return `${dir}${temp}${deep}${hard}`;
+}
+
+function expandVariants(code){
+  const [ie, t, d, r] = [code[0], code[2], code[3], code[4]];
+  const ieList = ie==="M" ? ["I","E"] : [ie];
+  const tList  = t==="M"  ? ["H","C"] : [t];
+  const dList  = d==="M"  ? ["D","S"] : [d];
+  const rList  = r==="M"  ? ["R","F"] : [r];
+  const variants=[];
+  ieList.forEach(I=> tList.forEach(T=> dList.forEach(D=> rList.forEach(R=>{
+    variants.push(`${I}-${T}${D}${R}`);
+  }))));
+  return variants;
+}
+
+function renderVariants(code){
+  const list = expandVariants(code);
+  const html = list.map(c=>{
+    const ie=c[0], t=c[2], d=c[3], r=c[4];
+    const title=titleFromLetters(ie,t,d,r);
+    const desc=descFromLetters(ie,t,d,r);
+    return `<div class="vcard" onclick="alert('${title}\\n${desc}')">
+      <div class="vtitle">${title} <span class="vcode">${c}</span></div>
+      <div style="color:#cbd5e1;font-size:13px">${desc}</div>
+    </div>`;
+  }).join("");
+  document.getElementById("variants").innerHTML = html;
+}
+
+function arch([ie,t,d,r]){
+  const dir=ie<=2.3?"内向基調で":ie>=3.7?"外向基調で":"中間基調で";
+  const temp=t<=2.3?"低温、":t>=3.7?"高温、":"中温、";
+  const deep=d<=2.3?"浅く、":d>=3.7?"深く、":"中深で、";
+  const hard=r<=2.3?"柔軟。":r>=3.7?"構造的。":"中硬。";
+  let title="中庸の航海者";
+  if (ie>=3.7&&t>=3.7&&d<=3.3) title="奔流の開拓者";
+  else if (ie<=2.3&&d>=3.7&&r>=3.7) title="静謐の守護者";
+  else if (ie<=2.3&&t<=2.3&&d>=3.7) title="冷き深海の思索者";
+  else if (ie>=3.7&&t>=3.7&&d>=3.7) title="灼熱の旗手";
+  else if (t<=2.3&&r<=2.3) title="しなる風の調停者";
+  else if (d>=3.7&&r<=2.3) title="柔らかな賢者";
+  else if (d<=2.3&&r>=3.7) title="鋭刃のスプリンター";
+  const desc=`${dir}${temp}${deep}${hard}`;
+  return {title,desc,tags:[dir.replace("基調で",""),temp.replace("、",""),deep.replace("、",""),hard.replace("。","")]};
+}
+
+function renderResult(center, range, muMap){
+  const vals=[center.ie,center.t,center.d,center.r];
+  const a=arch(vals);
+  document.getElementById("title").textContent="結果："+a.title;
+  document.getElementById("desc").textContent=a.desc;
+  document.getElementById("tags").innerHTML=a.tags.map(s=>`<span class="tag">${s}</span>`).join("");
+
+  // μベースでコード判定
+  const code = `${toIE(muMap.ie)}-${toT(muMap.t)}${toD(muMap.d)}${toR(muMap.r)}`;
+  document.getElementById("code").textContent = code;
+  renderVariants(code);
+
+  const widths = vals.map(v=>((v-1)/4*100));
+  const ids=["b0","b1","b2","b3"];
+  const rngIds=["rg0","rg1","rg2","rg3"];
+  const numIds=[["n0","r0"],["n1","r1"],["n2","r2"],["n3","r3"]];
+  widths.forEach((w,i)=>{
+    document.getElementById(ids[i]).style.width = w+"%";
+    const span = range[["ie","t","d","r"][i]];
+    const low = Math.max(1, vals[i]-span);
+    const high = Math.min(5, vals[i]+span);
+    const lowW = ((low-1)/4*100);
+    const highW = ((high-1)/4*100);
+    const el = document.getElementById(rngIds[i]);
+    el.style.left = lowW+"%";
+    el.style.width = Math.max(0, highW-lowW)+"%";
+    document.getElementById(numIds[i][0]).textContent = vals[i].toFixed(2);
+    document.getElementById(numIds[i][1]).textContent = (span*2).toFixed(2);
+  });
+}
+
+renderPage();
+</script>
+</body>
+</html>
