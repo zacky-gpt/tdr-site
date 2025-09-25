@@ -284,44 +284,29 @@ function renderVariants(code){
   document.getElementById("variants").innerHTML = html;
 }
   
-// これで既存の renderVariants を丸ごと置き換え
 function renderVariants(code){
-  // 1) ここでリンク先のベースを決める
-  //    どれか1つを残して他はコメントアウトにしてね。
-  // const ATLAS = "../atlas/#";                          // test/ から 1つ上 → atlas/
-  // const ATLAS = "/tdr-site/atlas/#";                   // リポジトリ固定の絶対パス（確実）
-  const ATLAS = "https://zacky-gpt.github.io/tdr-site/atlas/#";  // 本番URL直指定（最も確実）
+  // 1) クリック先のベースURLを決める
+  //    迷ったら本番URL直書きが確実。相対で行くなら行頭の1行だけ残して他はコメントアウト。
+  // const BASE = "../atlas/#";                                // test/ 配下から 1つ上の atlas/ に飛ばす
+  // const BASE = "/tdr-site/atlas/#";                         // リポジトリ固定の絶対パス
+  const BASE = "https://zacky-gpt.github.io/tdr-site/atlas/#"; // 公開URL直指定（最も確実）
 
-  try{
-    const variants = expandVariants(code);           // 例: "M-MMM" → 16通り
-    if(!variants || !variants.length){
-      document.getElementById("variants").innerHTML =
-        `<div class="foot">表示できるパターンがありません（code=${code}）。</div>`;
-      return;
-    }
+  const list = expandVariants(code); // 例: "M-MMM" → 最大16通り
+  const html = list.map(c=>{
+    const ie=c[0], t=c[2], d=c[3], r=c[4];
+    const title = titleFromLetters(ie,t,d,r);
+    const desc  = descFromLetters(ie,t,d,r);
+    const href  = `${BASE}${c}`;
+    return `
+      <a class="vcard" href="${href}" target="_blank" rel="noopener">
+        <div class="vtitle">${title} <span class="vcode">${c}</span></div>
+        <div style="color:#cbd5e1;font-size:13px">${desc}</div>
+      </a>
+    `;
+  }).join("");
 
-    const html = variants.map(c=>{
-      const ie=c[0], t=c[2], d=c[3], r=c[4];
-      const title = titleFromLetters(ie,t,d,r);
-      const desc  = descFromLetters(ie,t,d,r);
-      const href  = `${ATLAS}${c}`;
-
-      return `
-        <a class="vcard" href="${href}" target="_blank" rel="noopener">
-          <div class="vtitle">${title} <span class="vcode">${c}</span></div>
-          <div style="color:#cbd5e1;font-size:13px">${desc}</div>
-        </a>
-      `;
-    }).join("");
-
-    document.getElementById("variants").innerHTML = html;
-  }catch(err){
-    // 画面にも出す（コンソール見なくても分かるように）
-    document.getElementById("variants").innerHTML =
-      `<div class="foot">カード描画エラー：${String(err)}</div>`;
-    console.error("renderVariants error:", err, {code});
+  document.getElementById("variants").innerHTML = html;
   }
-}
 
 
 function arch([ie,t,d,r]){
