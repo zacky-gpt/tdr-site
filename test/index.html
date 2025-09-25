@@ -303,7 +303,24 @@ function renderVariants(code){
 
   document.getElementById("variants").innerHTML = html;
 }
+  
+function renderVariants(code){
+  const list = expandVariants(code);
+  const html = list.map(c=>{
+    const title = titleFromLetters(c[0],c[2],c[3],c[4]);
+    const desc  = descFromLetters(c[0],c[2],c[3],c[4]);
 
+    // とりあえずリンクは "#" にして様子を見る
+    return `
+      <a class="vcard" href="#" target="_blank" rel="noopener">
+        <div class="vtitle">${title} <span class="vcode">${c}</span></div>
+        <div style="color:#cbd5e1;font-size:13px">${desc}</div>
+      </a>
+    `;
+  }).join("");
+
+  document.getElementById("variants").innerHTML = html;
+}
 
 function arch([ie,t,d,r]){
   const dir=ie<=2.3?"内向基調で":ie>=3.7?"外向基調で":"中間基調で";
