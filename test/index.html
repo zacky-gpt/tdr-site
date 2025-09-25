@@ -47,19 +47,17 @@
   .scale{display:flex;justify-content:space-between;font-size:11px;color:#9aa4b2;margin-top:4px}
   /* style の一番下に追記 */
 .vcard{
-  display:block;
-  background:#ffffff08;
-  border:1px solid #ffffff20;
-  border-radius:10px;
-  padding:10px;
-  margin:0;            /* gridのgapで間隔は足りてる */
-  text-decoration:none;
-  color:inherit;
-  transition:background .2s, border-color .2s;
+  display:block !important;
+  background:#ffffff08 !important;
+  border:1px solid #ffffff20 !important;
+  border-radius:10px !important;
+  padding:10px !important;
+  text-decoration:none !important;
+  color:inherit !important;
 }
 .vcard:hover{
-  background:#0f172a;
-  border-color:#7dd3fc;
+  background:#0f172a !important;
+  border-color:#7dd3fc !important;
 }
 
 </style>
@@ -263,30 +261,60 @@ function descFromLetters(ie,t,d,r){
   return `${dir}${temp}${deep}${hard}`;
 }
 
+// これで既存の expandVariants を置き換え
 function expandVariants(code){
-  const [ie, t, d, r] = [code[0], code[2], code[3], code[4]];
-  const ieList = ie==="M" ? ["I","E"] : [ie];
-  const tList  = t==="M"  ? ["H","C"] : [t];
-  const dList  = d==="M"  ? ["D","S"] : [d];
-  const rList  = r==="M"  ? ["R","F"] : [r];
-  const variants=[];
-  ieList.forEach(I=> tList.forEach(T=> dList.forEach(D=> rList.forEach(R=>{
-    variants.push(`${I}-${T}${D}${R}`);
+  // 正規化：全角ハイフン等を半角に、空白除去、全大文字
+  let s = String(code || "")
+    .replace(/[－–—―ー]/g, "-")
+    .replace(/\s+/g, "")
+    .toUpperCase();
+
+  // 形式: I/E/M - H/C/M D/S/M R/F/M
+  const m = s.match(/^([IEM])\-([HCM])([DSM])([RFM])$/);
+  if(!m){
+    console.warn("expandVariants: code not matched:", code, "->", s);
+    return []; // パターン不一致なら空
+  }
+  const [, ie, t, d, r] = m;
+
+  const pick = (x, a, b) => x === "M" ? [a, b] : [x];
+  const ieList = pick(ie, "I", "E");
+  const tList  = pick(t , "H", "C");
+  const dList  = pick(d , "D", "S");
+  const rList  = pick(r , "R", "F");
+
+  const out = [];
+  ieList.forEach(I => tList.forEach(T => dList.forEach(D => rList.forEach(R => {
+    out.push(`${I}-${T}${D}${R}`);
   }))));
-  return variants;
+  return out;
 }
 
+  
+// これで既存の renderVariants を丸ごと置き換え
 function renderVariants(code){
-  // リポジトリ固定版
-  const BASE_URL = "https://zacky-gpt.github.io/tdr-site/atlas/#";
+  // まずは絶対パスで確実に飛ばす。慣れたら相対に戻してOK。
+  const BASE = "https://zacky-gpt.github.io/tdr-site/atlas/#";
 
+  const container = document.getElementById("variants");
+  if(!container){
+    console.error("variants container not found");
+    return;
+  }
+
+  // パターン展開（Mがなければ1通り）
   const list = expandVariants(code);
+  if(!list || list.length === 0){
+    container.innerHTML =
+      `<div class="foot">パターンを展開できませんでした（code=${String(code)}）。</div>`;
+    return;
+  }
+
   const html = list.map(c=>{
     const ie=c[0], t=c[2], d=c[3], r=c[4];
-    const title=titleFromLetters(ie,t,d,r);
-    const desc=descFromLetters(ie,t,d,r);
-    const href = `${ATLAS}${c}`;
-
+    const title = titleFromLetters(ie,t,d,r) || "タイプ";
+    const desc  = descFromLetters(ie,t,d,r)  || "";
+    const href  = `${BASE}${c}`;
     return `
       <a class="vcard" href="${href}" target="_blank" rel="noopener">
         <div class="vtitle">${title} <span class="vcode">${c}</span></div>
@@ -295,55 +323,13 @@ function renderVariants(code){
     `;
   }).join("");
 
-  document.getElementById("variants").innerHTML = html;
+  container.innerHTML = html;
+
+  // 画面下に軽いデバッグ表示（不要なら消してOK）
+  // container.insertAdjacentHTML("beforeend",
+  //   `<div class="foot">debug: code=${code} / variants=${list.length}</div>`);
 }
-  
-function renderVariants(code){
-  // クリック先：まずは確実な公開URL直書き。相対で行くならこの1行を変えるだけ。
-  const BASE = "https://zacky-gpt.github.io/tdr-site/atlas/#";
 
-  try{
-    const container = document.getElementById("variants");
-    if(!container){
-      console.warn("variants container not found");
-      return;
-    }
-
-    // 展開（Mがあれば両側、なければ1通り）
-    const list = expandVariants(code);
-
-    // 念のためフォールバック：空配列なら自分自身だけは出す
-    const safeList = (list && list.length) ? list : [code];
-
-    // カードHTMLを作成
-    const html = safeList.map(c=>{
-      const ie=c[0], t=c[2], d=c[3], r=c[4];
-      const title = titleFromLetters(ie,t,d,r) || "タイプ";
-      const desc  = descFromLetters(ie,t,d,r)  || "説明を取得できませんでした。";
-      const href  = `${BASE}${c}`;
-      return `
-        <a class="vcard" href="${href}" target="_blank" rel="noopener">
-          <div class="vtitle">${title} <span class="vcode">${c}</span></div>
-          <div style="color:#cbd5e1;font-size:13px">${desc}</div>
-        </a>
-      `;
-    }).join("");
-
-    container.innerHTML = html;
-
-    // デバッグ表示（必要なときだけ残してOK）
-    // container.insertAdjacentHTML("beforeend",
-    //   `<div class="foot">debug: code=${code} / variants=${safeList.length}</div>`);
-
-  }catch(err){
-    const container = document.getElementById("variants");
-    if(container){
-      container.innerHTML =
-        `<div class="foot">カード描画エラー：${String(err)}</div>`;
-    }
-    console.error("renderVariants error:", err, {code});
-  }
-}
 
 
 
