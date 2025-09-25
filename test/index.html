@@ -315,9 +315,11 @@ function renderResult(center, range, muMap){
   document.getElementById("tags").innerHTML=a.tags.map(s=>`<span class="tag">${s}</span>`).join("");
 
   // μベースでコード判定
-  const code = `${toIE(muMap.ie)}-${toT(muMap.t)}${toD(muMap.d)}${toR(muMap.r)}`;
-  document.getElementById("code").textContent = code;
-  renderVariants(code);
+    const code = `${toIE(muMap.ie)}-${toT(muMap.t)}${toD(muMap.d)}${toR(muMap.r)}`;
+  const atlasBase = "atlas/#"; // パス調整
+  document.getElementById("code").innerHTML =
+    `<a href="${atlasBase}${code}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${code}</a>`;
+
 
   const widths = vals.map(v=>((v-1)/4*100));
   const ids=["b0","b1","b2","b3"];
