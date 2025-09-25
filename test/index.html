@@ -45,14 +45,28 @@
   .range input[type="range"]{width:100%}
   .bubble{min-width:3ch;text-align:right;font-variant-numeric:tabular-nums;color:#cbd5e1}
   .scale{display:flex;justify-content:space-between;font-size:11px;color:#9aa4b2;margin-top:4px}
-  .vcard{
-  display:block;                 /* aタグでもカード化 */
-  text-decoration:none;          /* 下線消す */
-  color:inherit;                 /* 文字色はそのまま */
+  .vcard {
+  display: block;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 10px 0;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
 }
-.vcard:hover{                     /* ちょっとだけホバー感 */
-  background:#ffffff10;
-  border-color:#7dd3fc;
+.vcard:hover {
+  border-color: #7dd3fc;
+  background: #0f172a;
+}
+.vtitle {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+.vdesc {
+  font-size: 13px;
+  color: #cbd5e1;
 }
 </style>
 </head>
@@ -269,7 +283,7 @@ function expandVariants(code){
 }
 
 function renderVariants(code){
-  const ATLAS = "../atlas/#"; // ←パスは環境に合わせて "./atlas/#" でも "../atlas/#" でもOK
+  const ATLAS = "../atlas/#"; // ←相対パスは環境に合わせて変更してね
 
   const list = expandVariants(code);
   const html = list.map(c=>{
@@ -281,14 +295,13 @@ function renderVariants(code){
     return `
       <a class="vcard" href="${href}" target="_blank" rel="noopener">
         <div class="vtitle">${title} <span class="vcode">${c}</span></div>
-        <div style="color:#cbd5e1;font-size:13px">${desc}</div>
+        <div class="vdesc">${desc}</div>
       </a>
     `;
   }).join("");
 
   document.getElementById("variants").innerHTML = html;
 }
-
 
 function arch([ie,t,d,r]){
   const dir=ie<=2.3?"内向基調で":ie>=3.7?"外向基調で":"中間基調で";
