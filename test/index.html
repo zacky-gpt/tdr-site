@@ -292,6 +292,7 @@ function renderVariants(code){
   const BASE = "https://zacky-gpt.github.io/tdr-site/atlas/#"; // 公開URL直指定（最も確実）
 
   const list = expandVariants(code); // 例: "M-MMM" → 最大16通り
+  console.log("variants:", list, "code:", code);
   const html = list.map(c=>{
     const ie=c[0], t=c[2], d=c[3], r=c[4];
     const title = titleFromLetters(ie,t,d,r);
