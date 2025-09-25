@@ -291,44 +291,39 @@ function expandVariants(code){
 }
 
   
-// これで既存の renderVariants を丸ごと置き換え
 function renderVariants(code){
-  // まずは絶対パスで確実に飛ばす。慣れたら相対に戻してOK。
+  // まずは絶対パスで確実に飛ばす（相対は後で調整）
   const BASE = "https://zacky-gpt.github.io/tdr-site/atlas/#";
 
   const container = document.getElementById("variants");
-  if(!container){
-    console.error("variants container not found");
-    return;
-  }
+  if(!container){ return; }
 
-  // パターン展開（Mがなければ1通り）
+  // ここは元のロジックのまま（Mがあれば両側展開）
   const list = expandVariants(code);
-  if(!list || list.length === 0){
-    container.innerHTML =
-      `<div class="foot">パターンを展開できませんでした（code=${String(code)}）。</div>`;
-    return;
-  }
+  const safeList = (list && list.length) ? list : [code]; // 念のため
 
-  const html = list.map(c=>{
+  // divのまま、クリックでwindow.openする（ユーザー操作扱いなのでブロックされにくい）
+  const html = safeList.map(c=>{
     const ie=c[0], t=c[2], d=c[3], r=c[4];
-    const title = titleFromLetters(ie,t,d,r) || "タイプ";
-    const desc  = descFromLetters(ie,t,d,r)  || "";
-    const href  = `${BASE}${c}`;
+    const title=titleFromLetters(ie,t,d,r) || "タイプ";
+    const desc =descFromLetters(ie,t,d,r)  || "";
+    const href = `${BASE}${c}`;
     return `
-      <a class="vcard" href="${href}" target="_blank" rel="noopener">
+      <div class="vcard" role="button" tabindex="0"
+           onclick="window.open('${href}','_blank','noopener')"
+           onkeydown="if(event.key==='Enter'||event.key===' '){window.open('${href}','_blank','noopener')}">
         <div class="vtitle">${title} <span class="vcode">${c}</span></div>
         <div style="color:#cbd5e1;font-size:13px">${desc}</div>
-      </a>
+      </div>
     `;
   }).join("");
 
   container.innerHTML = html;
 
-  // 画面下に軽いデバッグ表示（不要なら消してOK）
-  // container.insertAdjacentHTML("beforeend",
-  //   `<div class="foot">debug: code=${code} / variants=${list.length}</div>`);
+  // デバッグ表示（必要なら一時的に有効化）
+  // container.insertAdjacentHTML("beforeend", `<div class="foot">debug: code=${code} / variants=${safeList.length}</div>`);
 }
+
 
 
 
