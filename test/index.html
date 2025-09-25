@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-   <base href="/tdr-site/">
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>魂読4軸 診断テスト 3ステップ（TDR版 multi beta｜0–100スライダー）</title>
 <style>
@@ -285,7 +284,7 @@ function expandVariants(code){
 
 function renderVariants(code){
   // リポジトリ固定版
-  const ATLAS = "/tdr-site/atlas/#";
+  const BASE_URL = "https://zacky-gpt.github.io/tdr-site/atlas/#";
 
   const list = expandVariants(code);
   const html = list.map(c=>{
