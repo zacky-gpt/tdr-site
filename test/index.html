@@ -95,6 +95,10 @@
   </div>
 </div>
 <script>
+// 先頭付近に追加（関数群の上あたり）
+const RESULT_PANEL = () => document.querySelector('aside.card');
+const isMobile = () => matchMedia('(hover: none) and (pointer: coarse)').matches;
+
 // 30問（TDRに対応）
 const Q = [
   {t:"急な誘いでも、あまり考えずに参加する。",w:{ie:0.7,t:0.3},rev:false},
@@ -172,9 +176,26 @@ window.setAns = function(idx, v){
   if(b) b.textContent = v;
 };
 
-backBtn.onclick = ()=>{ if(page>0){ page--; renderPage(); window.scrollTo({top:0,behavior:"smooth"});} };
-nextBtn.onclick = ()=>{ if(page<2){ page++; renderPage(); window.scrollTo({top:0,behavior:"smooth"});} };
-finishBtn.onclick = ()=>{ run(); window.scrollTo({top:0,behavior:"smooth"}); };
+backBtn.onclick = () => {
+  if (page > 0) { page--; renderPage(); }
+  if (!isMobile()) window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+nextBtn.onclick = () => {
+  if (page < 2) { page++; renderPage(); }
+  if (!isMobile()) window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+finishBtn.onclick = () => {
+  run();
+  // モバイルはトップへ戻さず、結果パネルの先頭へだけ移動
+  if (isMobile()) {
+    const el = RESULT_PANEL();
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  } else {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+};
 
 // ---- ここから集計（中央値50ベース） ----
 function median(arr){
