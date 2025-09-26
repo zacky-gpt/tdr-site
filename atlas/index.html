@@ -85,28 +85,31 @@
     // 詳細
     const details = document.getElementById("details");
     details.innerHTML = types.map(t => {
-      const code = t.code || t.id || "UNKNOWN";
-      const name = t.name || "名称未設定";
-      const desc = t.desc || t.description || "";
-      const adj  = t.adjust || {};
-      const tags = t.tags ? t.tags.map(x=>`<span class="tag">${x}</span>`).join("") : "";
-      return `
-        <section id="${code}" class="card">
-          <div class="sect">
-            <div style="font-size:18px;font-weight:800">${name} <span class="code">(${code})</span></div>
-            <div class="tags">${tags}</div>
-          </div>
-          <p style="margin-top:8px">${desc}</p>
-          <div style="font-weight:700;margin-top:8px">逆方向調整</div>
-          <ul style="margin:6px 0 0 18px">
-            <li>I/E：${adj["I/E"] ?? "-"}</li>
-            <li>T（H/C）：${adj["H/C"] ?? "-"}</li>
-            <li>D（D/S）：${adj["D/S"] ?? "-"}</li>
-            <li>R（R/F）：${adj["R/F"] ?? "-"}</li>
-          </ul>
-        </section>
-      `;
-    }).join("");
+    const code = t.code || t.id || "UNKNOWN";
+    const name = t.name || "名称未設定";
+    const desc = t.desc || t.description || "";
+    const longdesc = t.longdesc || "";  // ★ここで拾う
+    const adj  = t.adjust || {};
+    const tags = t.tags ? t.tags.map(x=>`<span class="tag">${x}</span>`).join("") : "";
+
+  return `
+    <section id="${code}" class="card">
+      <div class="sect">
+        <div style="font-size:18px;font-weight:800">${name} <span class="code">(${code})</span></div>
+        <div class="tags">${tags}</div>
+      </div>
+      <p style="margin-top:8px">${desc}</p>
+      ${longdesc ? `<p style="margin-top:8px;font-size:14px;line-height:1.6">${longdesc}</p>` : ""}
+      <div style="font-weight:700;margin-top:8px">逆方向調整</div>
+      <ul style="margin:6px 0 0 18px">
+        <li>I/E：${adj["I/E"] ?? "-"}</li>
+        <li>T（H/C）：${adj["H/C"] ?? "-"}</li>
+        <li>D（D/S）：${adj["D/S"] ?? "-"}</li>
+        <li>R（R/F）：${adj["R/F"] ?? "-"}</li>
+      </ul>
+    </section>
+  `;
+}).join("");
 
     // ハッシュ着地があればスクロール
     if (location.hash) {
