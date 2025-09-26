@@ -210,7 +210,7 @@ function median(arr){
 }
 
 // μ判定ヘルパ（0..100）
-function letterFromMu(mu){ const lo=42.5, hi=57.5; return mu>=hi?1:mu<=lo?-1:0; }
+function letterFromMu(mu){ const lo=45, hi=55; return mu>=hi?1:mu<=lo?-1:0; }
 function toIE(mu){ const s=letterFromMu(mu); return s===1?'E':s===-1?'I':'M'; }
 function toT (mu){ const s=letterFromMu(mu); return s===1?'H':s===-1?'C':'M'; }
 function toD (mu){ const s=letterFromMu(mu); return s===1?'D':s===-1?'S':'M'; }
@@ -247,7 +247,7 @@ function run(){
     const med = median(xs);
     const mad = median(xs.map(v=>Math.abs(v-med)));
     const sigma = 1.4826*(mad||0);
-    const k=1.0;
+    const k=0.8;
     const L = Math.max(20, Math.min(80, mu - k*sigma));
     const U = Math.max(20, Math.min(80, mu + k*sigma));
 
@@ -255,7 +255,7 @@ function run(){
     const ui = 2 + ((muClamped-40)/20)*2;       // 2..4
     center[ax] = ui;
 
-    const spanUi = Math.max(0.1, Math.min(1.0, (U - L) / 40));
+    const spanUi = Math.max(0.05, Math.min(0.8, (U - L) / 40));
     range[ax] = spanUi;
   });
 
@@ -263,10 +263,10 @@ function run(){
 }
 
 // ラベル（UI帯2〜4の見た目用：タイトル生成は従来判定でOK）
-function labelIE(v){ if (v <= 2.3) return "I"; if (v >= 3.7) return "E"; return "M"; }
-function labelT(v){ if (v <= 2.3) return "C"; if (v >= 3.7) return "H"; return "M"; }
-function labelD(v){ if (v <= 2.3) return "S"; if (v >= 3.7) return "D"; return "M"; }
-function labelR(v){ if (v <= 2.3) return "F"; if (v >= 3.7) return "R"; return "M"; }
+function labelIE(v){ if (v <= 2.5) return "I"; if (v >= 3.5) return "E"; return "M"; }
+function labelT(v){ if (v <= 2.5) return "C"; if (v >= 3.5) return "H"; return "M"; }
+function labelD(v){ if (v <= 2.5) return "S"; if (v >= 3.5) return "D"; return "M"; }
+function labelR(v){ if (v <= 2.5) return "F"; if (v >= 3.5) return "R"; return "M"; }
 
 function titleFromLetters(ie,t,d,r){
   if (ie==="E"&&t==="H"&&d==="D") return "灼熱の旗手";
@@ -354,18 +354,18 @@ function renderVariants(code){
 
 
 function arch([ie,t,d,r]){
-  const dir=ie<=2.3?"内向基調で":ie>=3.7?"外向基調で":"中間基調で";
-  const temp=t<=2.3?"低温、":t>=3.7?"高温、":"中温、";
-  const deep=d<=2.3?"浅く、":d>=3.7?"深く、":"中深で、";
-  const hard=r<=2.3?"柔軟。":r>=3.7?"構造的。":"中硬。";
+  const dir=ie<=2.5?"内向基調で":ie>=3.5?"外向基調で":"中間基調で";
+  const temp=t<=2.5?"低温、":t>=3.5?"高温、":"中温、";
+  const deep=d<=2.5?"浅く、":d>=3.5?"深く、":"中深で、";
+  const hard=r<=2.5?"柔軟。":r>=3.5?"構造的。":"中硬。";
   let title="中庸の航海者";
-  if (ie>=3.7&&t>=3.7&&d<=3.3) title="奔流の開拓者";
-  else if (ie<=2.3&&d>=3.7&&r>=3.7) title="静謐の守護者";
-  else if (ie<=2.3&&t<=2.3&&d>=3.7) title="冷き深海の思索者";
-  else if (ie>=3.7&&t>=3.7&&d>=3.7) title="灼熱の旗手";
-  else if (t<=2.3&&r<=2.3) title="しなる風の調停者";
-  else if (d>=3.7&&r<=2.3) title="柔らかな賢者";
-  else if (d<=2.3&&r>=3.7) title="鋭刃のスプリンター";
+  if (ie>=3.5&&t>=3.5&&d<=3.5) title="奔流の開拓者";
+  else if (ie<=2.5&&d>=3.5&&r>=3.5) title="静謐の守護者";
+  else if (ie<=2.5&&t<=2.5&&d>=3.5) title="冷き深海の思索者";
+  else if (ie>=3.5&&t>=3.5&&d>=3.5) title="灼熱の旗手";
+  else if (t<=2.5&&r<=2.5) title="しなる風の調停者";
+  else if (d>=3.5&&r<=2.5) title="柔らかな賢者";
+  else if (d<=2.5&&r>=3.5) title="鋭刃のスプリンター";
   const desc=`${dir}${temp}${deep}${hard}`;
   return {title,desc,tags:[dir.replace("基調で",""),temp.replace("、",""),deep.replace("、",""),hard.replace("。","")]};
 }
