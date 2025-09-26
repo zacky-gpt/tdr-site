@@ -403,6 +403,18 @@ function renderResult(center, range, muMap){
   });
 }
 
+// 3を跨いだら M、それ以外は上側/下側で片側に決める
+function letterByBand(ax, ui, span){
+  const low  = Math.max(1, ui - span);
+  const high = Math.min(5, ui + span);
+  // 少数の境界ぶれ対策で ±0.01 の遊び
+  if (low <= 3.01 && high >= 2.99) return "M";
+  if (ax === "ie") return ui >= 3.5 ? "E" : "I";
+  if (ax === "t" ) return ui >= 3.5 ? "H" : "C";
+  if (ax === "d" ) return ui >= 3.5 ? "D" : "S";
+  if (ax === "r" ) return ui >= 3.5 ? "R" : "F";
+}
+
 renderPage();
 </script>
 </body>
