@@ -186,10 +186,8 @@ nextBtn.onclick = () => {
     page++; 
     renderPage(); 
   }
-  // PCのときだけトップへ戻す
-  if (!isMobile()) {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
+  // モバイルでも必ずトップに戻る
+  window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
 finishBtn.onclick = () => {
