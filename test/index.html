@@ -182,8 +182,14 @@ backBtn.onclick = () => {
 };
 
 nextBtn.onclick = () => {
-  if (page < 2) { page++; renderPage(); }
-  if (!isMobile()) window.scrollTo({ top: 0, behavior: "smooth" });
+  if (page < 2) { 
+    page++; 
+    renderPage(); 
+  }
+  // PCのときだけトップへ戻す
+  if (!isMobile()) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 };
 
 finishBtn.onclick = () => {
