@@ -115,10 +115,10 @@ details.innerHTML = types.map(t => {
       ${longdesc ? `<p style="margin-top:8px;font-size:14px;line-height:1.6">${longdesc}</p>` : ""}
       <div style="font-weight:700;margin-top:8px">逆方向調整</div>
       <ul style="margin:6px 0 0 18px">
-        <li>I/E：${adj["I/E"] ?? "-"}</li>
-        <li>T（H/C）：${adj["H/C"] ?? "-"}</li>
-        <li>D（D/S）：${adj["D/S"] ?? "-"}</li>
-        <li>R（R/F）：${adj["R/F"] ?? "-"}</li>
+        <li>内/外（I/E）：${adj["I/E"] ?? "-"}</li>
+        <li>温度T（H/C）：${adj["H/C"] ?? "-"}</li>
+        <li>深さD（D/S）：${adj["D/S"] ?? "-"}</li>
+        <li>硬さR（R/F）：${adj["R/F"] ?? "-"}</li>
       </ul>
     </section>
   `;
