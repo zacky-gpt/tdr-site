@@ -91,11 +91,13 @@
     const longdesc = t.longdesc || "";  // ★ここで拾う
     const adj  = t.adjust || {};
     const tags = t.tags ? t.tags.map(x=>`<span class="tag">${x}</span>`).join("") : "";
+    const img  = t.img || "";
 
   return `
     <section id="${code}" class="card">
       <div class="sect">
         <div style="font-size:18px;font-weight:800">${name} <span class="code">(${code})</span></div>
+        ${img ? `<img src="${img}" alt="${name}" style="max-width:100px;margin-top:6px;">` : ""}
         <div class="tags">${tags}</div>
       </div>
       <p style="margin-top:8px">${desc}</p>
