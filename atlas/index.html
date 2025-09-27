@@ -27,9 +27,71 @@
   }
 .toplink.show{ opacity:1; pointer-events:auto; }
 
+/*フィルターバー*/
+.filterbar{
+  position: sticky; top: 0; z-index: 20;
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+  padding: 10px 12px; margin: 8px 0 12px;
+  background: rgba(23,26,33,.7); border: 1px solid #ffffff22; border-radius: 10px;
+  backdrop-filter: blur(6px);
+}
+.filterbar .row{display:flex; gap:6px; align-items:center}
+.filterbar label{font-size:12px; color:#9aa4b2}
+.filterbar select{
+  background:#0f1115; color:#e8ecf1; border:1px solid #ffffff33;
+  border-radius:8px; padding:6px 8px
+}
+.filterbar .ghost{
+  margin-left:auto; background:transparent; color:#e8ecf1;
+  border:1px solid #ffffff33; border-radius:8px; padding:6px 10px; cursor:pointer
+}
+.filterbar .count{font-size:12px; color:#9aa4b2}
+@media (max-width:700px){ .filterbar{gap:8px} .filterbar .ghost{order:5; margin-left:0} }
+
+  
 </style>
 </head>
 <body>
+<!-- 固定フィルタバー -->
+<div id="filterBar" class="filterbar">
+  <div class="row">
+    <label>I/E</label>
+    <select data-axis="ie">
+      <option value="M">M（両方）</option>
+      <option value="I">I</option>
+      <option value="E">E</option>
+    </select>
+  </div>
+  <div class="row">
+    <label>T（温度）</label>
+    <select data-axis="t">
+      <option value="M">M（中庸）</option>
+      <option value="C">C（低温）</option>
+      <option value="H">H（高温）</option>
+    </select>
+  </div>
+  <div class="row">
+    <label>D（深さ）</label>
+    <select data-axis="d">
+      <option value="M">M（中庸）</option>
+      <option value="S">S（浅）</option>
+      <option value="D">D（深）</option>
+    </select>
+  </div>
+  <div class="row">
+    <label>R（硬さ）</label>
+    <select data-axis="r">
+      <option value="M">M（中庸）</option>
+      <option value="F">F（柔）</option>
+      <option value="R">R（硬）</option>
+    </select>
+  </div>
+
+  <button id="resetFilter" class="ghost">リセット</button>
+  <div class="count"><span id="hitCount">16</span> / 16 件</div>
+</div>
+
+  
 <div class="wrap">
   <h1>TDR 16分類図鑑</h1>
   <div class="sub">上の一覧からタイプを選ぶと、ページ内の該当セクションへスクロールします。</div>
