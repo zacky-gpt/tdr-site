@@ -132,13 +132,6 @@
   }
 })();
 
-
-    // 一覧（チップ）
-    const grid = document.getElementById("grid");
-    grid.innerHTML = types.map(t => 
-      `<a class="chip" href="#${t.code||t.id}">${t.code||t.id}</a>`
-    ).join("");
-
    // 画像パス補正関数
 function resolveImg(p){
   if (!p) return "";
@@ -218,7 +211,7 @@ details.innerHTML = types.map(t => {
     }
     btn.addEventListener('click', toTopSmooth);
 
-    // スクロール量で表示/非表示
+    // スクロール量でTOPボタン表示/非表示
     function onScroll(){
       const y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
       if(y > 400) btn.classList.add('show'); else btn.classList.remove('show');
@@ -353,29 +346,6 @@ fetch('data/types.json').then(r=>r.json()).then(types=>{
   setupFilter(types);    // ←これだけ追加
 });
 */
-
-// カードの表示/非表示を切り替える
-function applyFilter(){
-  const ie = (document.getElementById('fIE')?.value || 'M').toUpperCase();
-  const t  = (document.getElementById('fT') ?.value || 'M').toUpperCase();
-  const d  = (document.getElementById('fD') ?.value || 'M').toUpperCase();
-  const r  = (document.getElementById('fR') ?.value || 'M').toUpperCase();
-
-  let shown = 0;
-  document.querySelectorAll('.card.type').forEach(el=>{
-    const ok =
-      (ie==='M' || el.dataset.ie === ie) &&
-      (t ==='M' || el.dataset.t  === t ) &&
-      (d ==='M' || el.dataset.d  === d ) &&
-      (r ==='M' || el.dataset.r  === r );
-
-    el.style.display = ok ? '' : 'none';
-    if(ok) shown++;
-  });
-
-  const label = document.getElementById('fCount');
-  if(label) label.textContent = `${shown}/16`;
-}
 
 // イベントを接続（DOM生成の後で！）
 ['fIE','fT','fD','fR'].forEach(id=>{
