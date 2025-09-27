@@ -169,6 +169,88 @@ details.innerHTML = types.map(t => {
     window.addEventListener('scroll', onScroll, {passive:true});
     onScroll(); // 初期評価
   })();
+
+  // 既存の types（types.json 読み込み済み）を使う想定。
+// まずカード描画を関数化（今ある map… をこの関数の中へ移動）
+function renderDetails(list){
+  const details = document.getElementById("details");
+  details.innerHTML = list.map(t => {
+    const code = t.code || t.id || "UNKNOWN";
+    const name = t.name || "名称未設定";
+    const desc = t.desc || t.description || "";
+    const longdesc = t.longdesc || "";
+    const adj  = t.adjust || {};
+    const tags = t.tags ? t.tags.map(x=>`<span class="tag">${x}</span>`).join("") : "";
+    const img  = t.img || "";
+
+    return `
+      <section id="${code}" class="card">
+        <div class="sect">
+          <div style="font-size:18px;font-weight:800">${name} <span class="code">(${code})</span></div>
+          ${img ? `<img src="${img}" alt="${name}" style="max-width:140px;float:right;margin-left:12px;border-radius:10px;border:1px solid #ffffff22">` : ""}
+          <div class="tags">${tags}</div>
+        </div>
+        <p style="margin-top:8px">${desc}</p>
+        ${longdesc ? `<p style="margin-top:8px;font-size:14px;line-height:1.7">${longdesc}</p>` : ""}
+        <div style="clear:both"></div>
+        <div style="font-weight:700;margin-top:8px">逆方向調整</div>
+        <ul style="margin:6px 0 0 18px">
+          <li>I/E：${adj["I/E"] ?? "-"}</li>
+          <li>T（H/C）：${adj["H/C"] ?? "-"}</li>
+          <li>D（D/S）：${adj["D/S"] ?? "-"}</li>
+          <li>R（R/F）：${adj["R/F"] ?? "-"}</li>
+        </ul>
+      </section>
+    `;
+  }).join("");
+}
+
+// --- フィルタロジック ---
+const state = { ie:'M', t:'M', d:'M', r:'M' }; // デフォルト M-MMM
+
+function matchCode(code, s){
+  // code: "E-HDR" のような形式
+  const [IE, rest] = String(code).split("-");
+  const T = rest?.[0], D = rest?.[1], R = rest?.[2];
+  const ok = (sel, v) => sel === 'M' || sel === v; // M は両方OK
+  return ok(s.ie, IE) && ok(s.t, T) && ok(s.d, D) && ok(s.r, R);
+}
+
+function setupFilter(types){
+  const bar = document.getElementById('filterBar');
+  const selects = bar.querySelectorAll('select[data-axis]');
+  const hit = document.getElementById('hitCount');
+
+  const apply = () => {
+    const filtered = types.filter(t => matchCode(t.code, state));
+    renderDetails(filtered);
+    hit.textContent = filtered.length;
+  };
+
+  selects.forEach(sel=>{
+    const ax = sel.dataset.axis;
+    sel.value = state[ax];               // 初期 M
+    sel.addEventListener('change', e=>{
+      state[ax] = e.target.value;
+      apply();
+    });
+  });
+  bar.querySelector('#resetFilter').addEventListener('click', ()=>{
+    state.ie = state.t = state.d = state.r = 'M';
+    selects.forEach(s => s.value = 'M');
+    apply();
+  });
+
+  apply(); // 初回描画（= M-MMM ですべて表示）
+}
+
+// ここは types を取得した後に呼ぶ（既存のロード箇所で差し替え）
+/*
+fetch('data/types.json').then(r=>r.json()).then(types=>{
+  setupFilter(types);    // ←これだけ追加
+});
+*/
+  
 </script>
 
 </body>
