@@ -99,6 +99,20 @@
 const RESULT_PANEL = () => document.querySelector('aside.card');
 const isMobile = () => matchMedia('(hover: none) and (pointer: coarse)').matches;
 
+let TYPES_MAP = new Map();
+
+async function loadTypes() {
+  try {
+    const res = await fetch("../data/types.json");   // test/ から見た相対
+    const list = await res.json();
+    TYPES_MAP = new Map(list.map(t => [t.code || t.id, t]));
+  } catch (e) {
+    console.warn("types.json を読めませんでした:", e);
+  }
+}
+
+
+  
 // 30問（TDRに対応）
 const Q = [
   {t:"急な誘いでも、あまり考えずに参加する。",w:{ie:0.7,t:0.3},rev:false},
@@ -201,6 +215,15 @@ finishBtn.onclick = () => {
   }
 };
 
+//コード→名前・説明を取るヘルパ
+function getTypeInfo(code){
+  const t = TYPES_MAP.get(code);
+  if (t) return { name: t.name, desc: t.desc };
+  // フォールバック（万一読み込めなかった時）
+  const [ie,tv,dv,rv] = [code[0], code[2], code[3], code[4]];
+  return { name: titleFromLetters(ie,tv,dv,rv), desc: descFromLetters(ie,tv,dv,rv) };
+}
+  
 // ---- ここから集計（中央値50ベース） ----
 function median(arr){
   if(arr.length===0) return 0;
@@ -317,36 +340,26 @@ function expandVariants(code){
 
   
 function renderVariants(code){
-  // まずは絶対パスで確実に飛ばす（相対は後で調整）
   const BASE = "https://zacky-gpt.github.io/tdr-site/atlas/#";
-
   const container = document.getElementById("variants");
-  if(!container){ return; }
+  if(!container) return;
 
-  // ここは元のロジックのまま（Mがあれば両側展開）
   const list = expandVariants(code);
-  const safeList = (list && list.length) ? list : [code]; // 念のため
+  const safeList = (list && list.length) ? list : [code];
 
-  // divのまま、クリックでwindow.openする（ユーザー操作扱いなのでブロックされにくい）
   const html = safeList.map(c=>{
-    const ie=c[0], t=c[2], d=c[3], r=c[4];
-    const title=titleFromLetters(ie,t,d,r) || "タイプ";
-    const desc =descFromLetters(ie,t,d,r)  || "";
+    const { name, desc } = getTypeInfo(c);
     const href = `${BASE}${c}`;
     return `
       <div class="vcard" role="button" tabindex="0"
            onclick="window.open('${href}','_blank','noopener')"
            onkeydown="if(event.key==='Enter'||event.key===' '){window.open('${href}','_blank','noopener')}">
-        <div class="vtitle">${title} <span class="vcode">${c}</span></div>
+        <div class="vtitle">${name} <span class="vcode">${c}</span></div>
         <div style="color:#cbd5e1;font-size:13px">${desc}</div>
-      </div>
-    `;
+      </div>`;
   }).join("");
 
   container.innerHTML = html;
-
-  // デバッグ表示（必要なら一時的に有効化）
-  // container.insertAdjacentHTML("beforeend", `<div class="foot">debug: code=${code} / variants=${safeList.length}</div>`);
 }
 
 
@@ -378,13 +391,16 @@ function renderResult(center, range, muMap){
   document.getElementById("tags").innerHTML=a.tags.map(s=>`<span class="tag">${s}</span>`).join("");
 
   // μベースでコード判定
-    const ieL = letterByBand("ie", center.ie, range.ie);
+const ieL = letterByBand("ie", center.ie, range.ie);
 const tL  = letterByBand("t" , center.t , range.t );
 const dL  = letterByBand("d" , center.d , range.d );
 const rL  = letterByBand("r" , center.r , range.r );
-
 const code = `${ieL}-${tL}${dL}${rL}`;
-
+ // ← ここを types.json ベースに
+  const info = getTypeInfo(code);
+  document.getElementById("title").textContent = `結果：${info.name}`;
+  document.getElementById("desc").textContent  = info.desc;
+  
   const atlasBase = "../atlas/#"; // パス調整
   document.getElementById("code").innerHTML =
     `<a href="${atlasBase}${code}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${code}</a>`;
@@ -420,7 +436,11 @@ function letterByBand(ax, ui, span){
   if (ax === "d" ) return ui >= 3.5 ? "D" : "S";
   if (ax === "r" ) return ui >= 3.5 ? "R" : "F";
 }
-
+  
+loadTypes().then(() => {
+  renderPage();   // ← 既存の初回描画
+});
+  
 renderPage();
 </script>
 </body>
