@@ -107,33 +107,30 @@
 
 <script>
 (async function(){
-  const MSG = (txt)=>{ 
-    document.getElementById("grid").innerHTML = `<div class="sub">${txt}</div>`; 
-  };
-
   try {
-    // ここは types.json の実位置に合わせて
     const url = "../data/types.json";
     const res = await fetch(url, {cache:"no-store"});
-    if(!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
     const raw = await res.json();
+    let types = Array.isArray(raw) ? raw : Object.values(raw);
 
-    // 配列でもオブジェクトでも受け取れるように正規化
-    let types;
-    if (Array.isArray(raw)) {
-      types = raw;
-    } else if (Array.isArray(raw.items)) {
-      types = raw.items;
-    } else {
-      // { "E-HDR": {...}, ... } 形式なら値を配列化
-      types = Object.values(raw);
-    }
+    // ソート
+    types.sort((a,b)=>(a.code||a.name).localeCompare(b.code||b.name));
 
-    if (!Array.isArray(types) || types.length === 0) {
-      MSG("types.json は読み込めましたが、配列が空でした。構造を確認してください。");
-      console.warn("raw:", raw);
-      return;
-    }
+    // 一覧（チップ）
+    const grid = document.getElementById("grid");
+    grid.innerHTML = types.map(t => 
+      `<a class="chip" href="#${t.code||t.id}">${t.code||t.id}</a>`
+    ).join("");
+
+    // ---- ここが重要 ----
+    renderDetails(types);   // 全部表示
+    setupFilter(types);     // フィルタ有効化
+    // --------------------
+
+  } catch (err) {
+    console.error(err);
+  }
+})();
 
     // ソート（code を想定・なければ name）
     types.sort((a,b)=>(a.code||a.name).localeCompare(b.code||b.name));
@@ -250,7 +247,7 @@ function renderDetails(list){
     const adj  = t.adjust || {};
     const tags = t.tags ? t.tags.map(x=>`<span class="tag">${x}</span>`).join("") : "";
     const img  = t.img || "";
-    const L = splitLetters(code);  // ← ここで分解
+    const L = splitLetters(code);
     
     return `
      <section id="${code}" class="card type"
@@ -274,6 +271,44 @@ function renderDetails(list){
   `;
  }).join("");
 }
+
+function setupFilter(types){
+  const state = { ie:'M', t:'M', d:'M', r:'M' };
+  const bar = document.getElementById('filterBar');
+  const selects = bar.querySelectorAll('select[data-axis]');
+  const hit = document.getElementById('hitCount');
+
+  const apply = () => {
+    const filtered = types.filter(t => matchCode(t.code, state));
+    renderDetails(filtered);
+    hit.textContent = `${filtered.length} / ${types.length} 件`;
+  };
+
+  selects.forEach(sel=>{
+    const ax = sel.dataset.axis;
+    sel.value = state[ax];
+    sel.addEventListener('change', e=>{
+      state[ax] = e.target.value;
+      apply();
+    });
+  });
+
+  bar.querySelector('#resetFilter').addEventListener('click', ()=>{
+    state.ie = state.t = state.d = state.r = 'M';
+    selects.forEach(s => s.value = 'M');
+    apply();
+  });
+
+  apply();
+}
+
+function matchCode(code, s){
+  const [IE, rest] = String(code).split("-");
+  const T = rest?.[0], D = rest?.[1], R = rest?.[2];
+  const ok = (sel, v) => sel === 'M' || sel === v;
+  return ok(s.ie, IE) && ok(s.t, T) && ok(s.d, D) && ok(s.r, R);
+}
+
 
 // --- フィルタロジック ---
 const state = { ie:'M', t:'M', d:'M', r:'M' }; // デフォルト M-MMM
