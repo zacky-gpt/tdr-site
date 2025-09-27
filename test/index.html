@@ -382,10 +382,7 @@ function renderVariants(code){
   }).join("");
 
   container.innerHTML = html;
-  const u = new URL("https://twitter.com/intent/tweet");
-u.searchParams.set("text", `診断結果：${code}｜${title} #TDR`);
-u.searchParams.set("url", location.href.replace(/test\/?.*$/, "atlas/#"+code));
-window.open(u, "_blank", "noopener,width=560,height=600");
+  
 
 }
 
