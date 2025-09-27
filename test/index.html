@@ -94,6 +94,28 @@
     </aside>
   </div>
 </div>
+  <button id="shareX" class="btn">Xでシェア</button>
+<script>
+const SITE_URL = "https://zacky-gpt.github.io/tdr-site/";
+const SHARE_TEXT = "【TDR診断】可動域で見る新しい性格テスト";
+
+document.getElementById("shareX").onclick = async () => {
+  // スマホ対応（Web Share API）
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: "TDR 4軸", text: SHARE_TEXT, url: SITE_URL });
+      return;
+    } catch(_) {}
+  }
+  // デスクトップ：Xのintentを開く
+  const u = new URL("https://twitter.com/intent/tweet");
+  u.searchParams.set("text", SHARE_TEXT);
+  u.searchParams.set("url", SITE_URL);
+  u.searchParams.set("hashtags", "TDR,性格診断");
+  window.open(u.toString(), "_blank", "noopener,width=560,height=600");
+};
+</script>
+
 <script>
 // 先頭付近に追加（関数群の上あたり）
 const RESULT_PANEL = () => document.querySelector('aside.card');
@@ -360,6 +382,11 @@ function renderVariants(code){
   }).join("");
 
   container.innerHTML = html;
+  const u = new URL("https://twitter.com/intent/tweet");
+u.searchParams.set("text", `診断結果：${code}｜${title} #TDR`);
+u.searchParams.set("url", location.href.replace(/test\/?.*$/, "atlas/#"+code));
+window.open(u, "_blank", "noopener,width=560,height=600");
+
 }
 
 
@@ -440,6 +467,11 @@ function letterByBand(ax, ui, span){
 loadTypes().then(() => {
   renderPage();   // ← 既存の初回描画
 });
+  
+const u = new URL("https://twitter.com/intent/tweet");
+u.searchParams.set("text", `診断結果：${code}｜${title} #TDR`);
+u.searchParams.set("url", location.href.replace(/test\/?.*$/, "atlas/#"+code));
+window.open(u, "_blank", "noopener,width=560,height=600");
   
 renderPage();
 </script>
