@@ -4,6 +4,21 @@
 <meta name="description" content="温度・深度・硬度・内外の4軸で“可動域”を測るTDR式診断。">
 <meta property="og:title" content="TDR 4軸"><meta property="og:description" content="“動かせる自分”を測る診断と16分類図鑑。">
 <meta property="og:type" content="website"><meta property="og:image" content="assets/og.png">
+<!-- 基本 -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="TDR 4軸｜性格診断と16分類図鑑">
+<meta property="og:description" content="温度・深度・硬度・内外の4軸で“可動域”を測るTDR式診断。結果はブラウザ内で完結。">
+<meta property="og:url" content="https://zacky-gpt.github.io/tdr-site/">
+<meta property="og:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png">
+<meta property="og:site_name" content="TDR 4軸">
+
+<!-- Twitterカード -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TDR 4軸｜性格診断と16分類図鑑">
+<meta name="twitter:description" content="4軸×可動域で“動かせる自分”を可視化。">
+<meta name="twitter:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png">
+<!-- 任意 -->
+<!-- <meta name="twitter:site" content="@your_account"> -->
 <style>
 body{margin:0;background:#0f1115;color:#e8ecf1;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans JP",sans-serif}
 .wrap{max-width:860px;margin:0 auto;padding:20px}
@@ -43,5 +58,27 @@ a.btn{display:inline-block;padding:10px 14px;border-radius:10px;background:#7dd3
     <h2>モデルについて</h2>
     <p class="sub">本診断はオリジナルの価値回路モデル（TDR）です。医学的・臨床的評価ではありません。</p>
   </div>
-</div></body></html>
+</div>
+<button id="shareX" class="btn">Xでシェア</button>
+<script>
+const SITE_URL = "https://zacky-gpt.github.io/tdr-site/";
+const SHARE_TEXT = "【TDR診断】可動域で見る新しい性格テスト";
+
+document.getElementById("shareX").onclick = async () => {
+  // スマホ対応（Web Share API）
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: "TDR 4軸", text: SHARE_TEXT, url: SITE_URL });
+      return;
+    } catch(_) {}
+  }
+  // デスクトップ：Xのintentを開く
+  const u = new URL("https://twitter.com/intent/tweet");
+  u.searchParams.set("text", SHARE_TEXT);
+  u.searchParams.set("url", SITE_URL);
+  u.searchParams.set("hashtags", "TDR,性格診断");
+  window.open(u.toString(), "_blank", "noopener,width=560,height=600");
+};
+</script>
+</body></html>
 
