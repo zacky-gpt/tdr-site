@@ -82,22 +82,33 @@
       `<a class="chip" href="#${t.code||t.id}">${t.code||t.id}</a>`
     ).join("");
 
-    // 詳細
-    const details = document.getElementById("details");
-    details.innerHTML = types.map(t => {
-    const code = t.code || t.id || "UNKNOWN";
-    const name = t.name || "名称未設定";
-    const desc = t.desc || t.description || "";
-    const longdesc = t.longdesc || "";  // ★ここで拾う
-    const adj  = t.adjust || {};
-    const tags = t.tags ? t.tags.map(x=>`<span class="tag">${x}</span>`).join("") : "";
-    const img  = t.img || "";
+   // 画像パス補正関数
+function resolveImg(p){
+  if (!p) return "";
+  if (/^https?:\/\//.test(p)) return p;            // 外部URLはそのまま
+  if (p.startsWith("/")) return p;                 // 絶対パス指定もそのまま
+  // atlas 下にいるときは1階層戻す
+  return (location.pathname.includes("/atlas/") ? "../" : "") + p;
+}
+
+// 詳細
+const details = document.getElementById("details");
+details.innerHTML = types.map(t => {
+  const code = t.code || t.id || "UNKNOWN";
+  const name = t.name || "名称未設定";
+  const desc = t.desc || t.description || "";
+  const longdesc = t.longdesc || "";
+  const adj  = t.adjust || {};
+  const tags = t.tags ? t.tags.map(x=>`<span class="tag">${x}</span>`).join("") : "";
+  const img  = resolveImg(t.img || "");
 
   return `
     <section id="${code}" class="card">
       <div class="sect">
-        <div style="font-size:18px;font-weight:800">${name} <span class="code">(${code})</span></div>
-        ${img ? `<img src="${img}" alt="${name}" style="max-width:100px;margin-top:6px;">` : ""}
+        <div style="font-size:18px;font-weight:800">
+          ${name} <span class="code">(${code})</span>
+        </div>
+        ${img ? `<img src="${img}" alt="${name}" style="max-width:100px;margin-top:6px;" onerror="this.remove()">` : ""}
         <div class="tags">${tags}</div>
       </div>
       <p style="margin-top:8px">${desc}</p>
@@ -112,7 +123,7 @@
     </section>
   `;
 }).join("");
-
+    
     // ハッシュ着地があればスクロール
     if (location.hash) {
       const el = document.querySelector(location.hash);
