@@ -584,15 +584,7 @@ function letterByBand(ax, ui, span){
   if (ax === "d" ) return ui >= 3.5 ? "D" : "S";
   if (ax === "r" ) return ui >= 3.5 ? "R" : "F";
 }
-  
-loadTypes().then(() => {
-  renderPage();   // ← 既存の初回描画
-});
-  
-renderPage();
-    
-</script>
-<script>
+
   // 初期テーマ：デフォはpastel
   const root = document.documentElement;
   const saved = localStorage.getItem('theme');
@@ -604,6 +596,15 @@ renderPage();
     if(next){ root.setAttribute('data-theme', next); localStorage.setItem('theme', next); }
     else { root.removeAttribute('data-theme'); localStorage.removeItem('theme'); } // ダーク
   });
+
+
+loadTypes().then(() => {
+  renderPage();   // ← 既存の初回描画
+});
+  
+renderPage();
+    
 </script>
+
 </body>
 </html>
