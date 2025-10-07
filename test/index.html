@@ -69,12 +69,150 @@
   background:#0f172a !important;
   border-color:#7dd3fc !important;
 }
+/* === TDR Facelift Pack ===================== */
+/* デザイン変数（ライト/ダーク/パステル） */
+:root{
+  --bg: #0f1115;
+  --card: #171a21;
+  --line: #ffffff22;
+  --text: #e8ecf1;
+  --sub: #9aa4b2;
 
+  --brand: #7dd3fc;
+  --brand-2: #a78bfa;
+  --ok: #34d399;
+  --warn: #fbbf24;
+
+  --radius: 14px;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --blur: 8px;
+}
+
+/* パステル・ファンシー（ダーク寄り） */
+[data-theme="pastel"]{
+  --bg:#0e1016;
+  --card: rgba(255,255,255,.07);
+  --line: rgba(255,255,255,.14);
+  --text:#f3f6fc;
+  --sub:#b8c2d3;
+  --brand:#8ad5ff;     /* 水色 */
+  --brand-2:#c7b3ff;  /* 薄むらさき */
+  --ok:#9af0c4;
+  --warn:#ffd883;
+}
+
+/* ライト */
+[data-theme="light"]{
+  --bg:#f7f8fb;
+  --card:#ffffff;
+  --line:#e8edf3;
+  --text:#101318;
+  --sub:#5c6b7f;
+  --brand:#0ea5e9;
+  --brand-2:#8b5cf6;
+  --ok:#10b981;
+  --warn:#f59e0b;
+}
+
+/* ベース */
+body{
+  background: var(--bg);
+  color: var(--text);
+}
+.wrap{ max-width:1080px; margin:0 auto; padding:20px; }
+
+.card{
+  background: var(--card);
+  border:1px solid var(--line);
+  border-radius: var(--radius);
+  padding:18px;
+  margin:12px 0;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(var(--blur));
+}
+
+/* タイトル/サブ */
+h1{ font-size: clamp(22px, 2.6vw, 30px); margin: 8px 0 8px; letter-spacing:.2px; }
+.sub{ color: var(--sub); font-size: 13.5px; }
+
+/* ボタン */
+a.btn, .btn{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 14px; border-radius:10px;
+  background: linear-gradient(180deg, var(--brand), var(--brand-2));
+  color:#081019; font-weight:800; text-decoration:none; border:none; cursor:pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  transition: transform .08s ease, filter .2s ease;
+}
+a.btn:hover, .btn:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+.btn.ghost{
+  background: transparent; color: var(--text);
+  border:1px solid var(--line);
+}
+
+/* チップ/タグ/フィルタ */
+.chip{
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,.04));
+  border:1px solid var(--line);
+  border-radius:12px; padding:10px 10px; font-weight:800;
+  transition: transform .08s ease, border-color .2s ease, background .2s ease;
+}
+.chip:hover{ transform: translateY(-1px); border-color: var(--brand); background: rgba(255,255,255,.07); }
+
+.tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:6px }
+.tag{
+  font-size:12px; padding:4px 10px; border-radius:999px;
+  background: rgba(255,255,255,.08); border:1px solid var(--line);
+}
+
+/* フィルターバー: ちょい浮遊＆固定 */
+.filterbar{
+  position: sticky; top: 6px; z-index: 30;
+  display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+  padding:10px 12px; margin:8px 0 12px;
+  background: rgba(20,22,30,.55);
+  border:1px solid var(--line);
+  border-radius:12px; backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+}
+.filterbar select{
+  background: transparent; color: var(--text);
+  border:1px solid var(--line); border-radius:10px; padding:8px 10px;
+}
+.filterbar label{ color: var(--sub); font-size:12px }
+
+/* スライダー/バー（診断ページ用の見た目だけ刷新） */
+.barwrap{ height:16px; background: rgba(255,255,255,.12); border:1px solid var(--line); border-radius:999px; overflow:hidden }
+.bar{ height:100%; width:0; background: linear-gradient(90deg, var(--brand), var(--brand-2)) }
+.bar.t{ background: linear-gradient(90deg, #fb7185, #f472b6) }
+.bar.d{ background: linear-gradient(90deg, #34d399, #10b981) }
+.bar.r{ background: linear-gradient(90deg, #fbbf24, #f59e0b) }
+
+/* TOPへボタン */
+.toplink{
+  background: linear-gradient(180deg, var(--brand), var(--brand-2));
+  color:#081019; font-weight:900; border:none;
+  border-radius:999px; padding:12px 16px;
+  box-shadow: var(--shadow);
+}
+
+/* 画像（図鑑の立ち絵） */
+.card .figure{
+  max-height: 320px; width:auto; display:block; margin-top:8px;
+  border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+/* スクロール補正（フィルタバーに隠れない） */
+.card { scroll-margin-top: 90px; }
+    
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>魂読4軸 診断テスト 3ステップ（TDR版 multi beta｜0–100スライダー）</h1>
+    
+    <button id="themeToggle" class="btn ghost" style="float:right">テーマ</button>
+
   <div class="sub">全30問。I/E（内外）＋ T（温度：Hot/Cool）＋ D（深さ：Deep/Shallow）＋ R（硬さ：Rigid/Flexible）。中庸（M）がある軸は、両側の可能性パターンも同時に表示します（最大16個）。中央値50を基準に中心と可動域を推定します。</div>
   <div class="stepper"><div class="dot"><span id="prog"></span></div><div class="foot" id="pcl" style="min-width:120px;text-align:right"></div></div>
   <div class="grid">
@@ -452,6 +590,20 @@ loadTypes().then(() => {
 });
   
 renderPage();
+    
+</script>
+<script>
+  // 初期テーマ：デフォはpastel
+  const root = document.documentElement;
+  const saved = localStorage.getItem('theme');
+  root.setAttribute('data-theme', saved || 'pastel');
+
+  document.getElementById('themeToggle')?.addEventListener('click', ()=>{
+    const cur = root.getAttribute('data-theme') || 'pastel';
+    const next = cur === 'pastel' ? 'light' : cur === 'light' ? '' : 'pastel';
+    if(next){ root.setAttribute('data-theme', next); localStorage.setItem('theme', next); }
+    else { root.removeAttribute('data-theme'); localStorage.removeItem('theme'); } // ダーク
+  });
 </script>
 </body>
 </html>
