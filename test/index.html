@@ -3,43 +3,51 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>魂読4軸 診断テスト 3ステップ（TDR版 multi beta｜0–100スライダー）</title>
-    <!-- OGP設定 -->
 <meta name="description" content="温度・深度・硬度・内外の4軸で“可動域”を測るTDR式診断。">
 <meta property="og:title" content="TDR 4軸"><meta property="og:description" content="“動かせる自分”を測る診断と16分類図鑑。">
 <meta property="og:type" content="website"><meta property="og:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png">
 <link rel="icon" href="https://zacky-gpt.github.io/tdr-site/favicon.ico" type="image/x-icon">
-  <!-- Twitterカード対応 -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="TDR 4軸性格診断" />
 <meta name="twitter:description" content="動かせる自分を見つける診断と16分類図鑑。" />
 <meta name="twitter:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png" />
+
 <style>
-  body{margin:0;background:#0f1115;color:#e8ecf1;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","Helvetica Neue",Arial,sans-serif;line-height:1.6}
+  :root { --primary: #7dd3fc; --accent: #a78bfa; --bg: #0f1115; --card: #171a21; --text: #e8ecf1; }
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;line-height:1.6}
   .wrap{max-width:1080px;margin:0 auto;padding:16px}
-  .card{background:#171a21;border:1px solid #ffffff20;border-radius:12px;padding:16px;margin:10px 0}
-  h1{font-size:20px;margin:0 0 4px}
+  .card{background:var(--card);border:1px solid #ffffff20;border-radius:12px;padding:16px;margin:10px 0; transition: transform 0.2s ease;}
+  h1{font-size:20px;margin:0 0 4px; background: linear-gradient(90deg, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
   .sub{color:#9aa4b2;font-size:13px}
-  .q{margin:10px 0;padding:10px;border-radius:10px;background:#ffffff0a;border:1px solid #ffffff22}
-  .btn{appearance:none;border:none;background:#7dd3fc;color:#081019;font-weight:700;padding:10px 14px;border-radius:10px;cursor:pointer}
-  .btn.sec{background:#a78bfa;color:#081019}
+  .q{margin:10px 0;padding:12px;border-radius:10px;background:#ffffff0a;border:1px solid #ffffff22; transition: background 0.3s;}
+  .q:focus-within { background: #ffffff0f; border-color: var(--primary); }
+  
+  .btn{appearance:none;border:none;background:var(--primary);color:#081019;font-weight:700;padding:10px 14px;border-radius:10px;cursor:pointer; transition: opacity 0.2s;}
+  .btn:hover { opacity: 0.9; }
+  .btn.sec{background:var(--accent);color:#081019}
   .btn.ghost{background:transparent;color:#e8ecf1;border:1px solid #ffffff35}
+  
+  /* Share Button Style */
+  .btn.twitter { background: #000; color: #fff; border: 1px solid #333; display: flex; align-items: center; gap: 6px; margin-top: 10px; width: 100%; justify-content: center;}
+  .btn.twitter svg { width: 16px; fill: #fff; }
+
   .grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:14px}
   @media (max-width:1000px){.grid{grid-template-columns:1fr}}
   .row{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin:8px 0}
   .label{color:#cdd4dd;font-size:13px}
   .barwrap{height:16px;background:#ffffff12;border-radius:10px;overflow:hidden;border:1px solid #ffffff22}
-  .bar{height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#22d3ee)}
+  .bar{height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#22d3ee); transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);}
   .bar.t{background:linear-gradient(90deg,#f472b6,#fb7185)}
   .bar.d{background:linear-gradient(90deg,#34d399,#10b981)}
   .bar.r{background:linear-gradient(90deg,#fbbf24,#f59e0b)}
   .rng{position:relative;height:4px;margin-top:4px;background:#ffffff14;border-radius:999px}
-  .rng>span{position:absolute;top:0;bottom:0;border-radius:999px;background:#ffffff60}
+  .rng>span{position:absolute;top:0;bottom:0;border-radius:999px;background:#ffffff60; transition: left 0.5s, width 0.5s;}
   .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
   .tag{padding:4px 8px;border-radius:8px;background:#ffffff10;border:1px solid #ffffff20;font-size:12px}
   .num{font-variant-numeric:tabular-nums}
   .stepper{display:flex;gap:6px;margin:10px 0}
   .dot{height:8px;width:100%;background:#ffffff20;border-radius:99px;overflow:hidden}
-  .dot>span{display:block;height:100%;width:0;background:#7dd3fc}
+  .dot>span{display:block;height:100%;width:0;background:var(--primary); transition: width 0.3s ease;}
   .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
   .foot{color:#9aa4b2;font-size:12px;margin-top:6px}
   .hidden{display:none !important}
@@ -47,37 +55,32 @@
   .code{font-weight:800;letter-spacing:1px;background:#ffffff12;border:1px solid #ffffff25;border-radius:10px;padding:6px 10px}
   .variants{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
   @media (max-width:800px){.variants{grid-template-columns:1fr}}
-  .vcard{background:#ffffff08;border:1px solid #ffffff20;border-radius:10px;padding:10px;cursor:pointer}
+  
+  /* Improved VCard */
+  .vcard{display:block;background:#ffffff08;border:1px solid #ffffff20;border-radius:10px;padding:10px;text-decoration:none;color:inherit; transition: all 0.2s;}
+  .vcard:hover{background:#1e293b;border-color:var(--primary);transform: translateY(-2px);}
   .vtitle{font-weight:700;margin-bottom:4px}
-  .vcode{font-family:ui-monospace,Menlo,monospace;font-weight:700}
-  /* スライダー */
+  .vcode{font-family:ui-monospace,Menlo,monospace;font-weight:700; color: var(--primary);}
+
+  /* Dynamic Slider Logic */
   .range{display:flex;align-items:center;gap:10px;margin-top:8px}
-  .range input[type="range"]{width:100%}
-  .bubble{min-width:3ch;text-align:right;font-variant-numeric:tabular-nums;color:#cbd5e1}
+  .range input[type="range"]{width:100%; accent-color: #64748b; transition: accent-color 0.2s; cursor: pointer;}
+  /* Active state color for slider (applied via JS) */
+  .range input[type="range"].active { accent-color: var(--primary); }
+  
+  .bubble{min-width:3ch;text-align:right;font-variant-numeric:tabular-nums;color:#64748b; font-weight:bold; transition: color 0.2s;}
+  .bubble.active { color: var(--primary); }
+  
   .scale{display:flex;justify-content:space-between;font-size:11px;color:#9aa4b2;margin-top:4px}
-  /* style の一番下に追記 */
-.vcard{
-  display:block !important;
-  background:#ffffff08 !important;
-  border:1px solid #ffffff20 !important;
-  border-radius:10px !important;
-  padding:10px !important;
-  text-decoration:none !important;
-  color:inherit !important;
-}
-.vcard:hover{
-  background:#0f172a !important;
-  border-color:#7dd3fc !important;
-}
-    
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>魂読4軸 診断テスト 3ステップ（TDR版 multi beta｜0–100スライダー）</h1>
+  <h1>魂読4軸 診断テスト <span style="font-size:0.8em; opacity:0.7;">(TDR multi beta)</span></h1>
 
-  <div class="sub">全30問。I/E（内外）＋ T（温度：Hot/Cool）＋ D（深さ：Deep/Shallow）＋ R（硬さ：Rigid/Flexible）。中庸（M）がある軸は、両側の可能性パターンも同時に表示します（最大16個）。中央値50を基準に中心と可動域を推定します。</div>
+  <div class="sub">全30問。I/E（内外）＋ T（温度：Hot/Cool）＋ D（深さ：Deep/Shallow）＋ R（硬さ：Rigid/Flexible）。中庸（M）がある軸は、両側の可能性パターンも同時に表示します。</div>
   <div class="stepper"><div class="dot"><span id="prog"></span></div><div class="foot" id="pcl" style="min-width:120px;text-align:right"></div></div>
+  
   <div class="grid">
     <section class="card">
       <form id="quiz"></form>
@@ -86,44 +89,60 @@
         <button class="btn" type="button" id="nextBtn">次へ</button>
         <button class="btn sec hidden" type="button" id="finishBtn">診断結果を見る</button>
       </div>
-      <div class="foot">スライダーは0（当てはまらない）〜100（とても当てはまる）。未操作は50として扱います。</div>
+      <div class="foot">スライダーは0（当てはまらない）〜100（とても当てはまる）。未操作は50（中立）として扱います。</div>
     </section>
-    <aside class="card">
-      <div id="title" style="font-weight:700;margin-bottom:6px">結果：未診断</div>
+    
+    <aside class="card" id="resultPanel">
+      <div id="title" style="font-weight:700;margin-bottom:6px;font-size:1.2em;">結果：未診断</div>
       <div class="codebox"><div>コード</div><div id="code" class="code">-</div></div>
-      <div id="desc" style="color:#d1d5db;font-size:14px"></div>
+      <div id="desc" style="color:#d1d5db;font-size:14px;margin-top:8px;line-height:1.8;">診断を行ってください...</div>
       <div class="tags" id="tags"></div>
-      <div style="height:1px;background:#ffffff30;margin:10px 10px"></div>
+      
+      <button id="shareBtn" class="btn twitter hidden" onclick="shareResult()">
+        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+        Xで結果をシェア
+      </button>
+
+      <div style="height:1px;background:#ffffff30;margin:16px 0"></div>
+      
       <div class="row"><div class="label">I/E（内外）</div><div><div class="barwrap"><div id="b0" class="bar"></div></div><div class="rng"><span id="rg0" style="left:0;width:0"></span></div><div style="font-size:12px;color:#9aa4b2">中心 <span id="n0" class="num">-</span> / 範囲 <span id="r0" class="num">-</span></div></div></div>
-      <div class="row"><div class="label">T：温度（Temperature）C/H</div><div><div class="barwrap"><div id="b1" class="bar t"></div></div><div class="rng"><span id="rg1" style="left:0;width:0"></span></div><div style="font-size:12px;color:#9aa4b2">中心 <span id="n1" class="num">-</span> / 範囲 <span id="r1" class="num">-</span></div></div></div>
-      <div class="row"><div class="label">D：深さ（Depth）S/D</div><div><div class="barwrap"><div id="b2" class="bar d"></div></div><div class="rng"><span id="rg2" style="left:0;width:0"></span></div><div style="font-size:12px;color:#9aa4b2">中心 <span id="n2" class="num">-</span> / 範囲 <span id="r2" class="num">-</span></div></div></div>
-      <div class="row"><div class="label">R：硬さ（Rigidity）F/R</div><div><div class="barwrap"><div id="b3" class="bar r"></div></div><div class="rng"><span id="rg3" style="left:0;width:0"></span></div><div style="font-size:12px;color:#9aa4b2">中心 <span id="n3" class="num">-</span> / 範囲 <span id="r3" class="num">-</span></div></div></div>
-      <div style="height:1px;background:#ffffff30;margin:10px 10px"></div>
-      <div style="font-weight:700">中庸軸の両側パターン</div>
+      <div class="row"><div class="label">T：温度 C/H</div><div><div class="barwrap"><div id="b1" class="bar t"></div></div><div class="rng"><span id="rg1" style="left:0;width:0"></span></div><div style="font-size:12px;color:#9aa4b2">中心 <span id="n1" class="num">-</span> / 範囲 <span id="r1" class="num">-</span></div></div></div>
+      <div class="row"><div class="label">D：深さ S/D</div><div><div class="barwrap"><div id="b2" class="bar d"></div></div><div class="rng"><span id="rg2" style="left:0;width:0"></span></div><div style="font-size:12px;color:#9aa4b2">中心 <span id="n2" class="num">-</span> / 範囲 <span id="r2" class="num">-</span></div></div></div>
+      <div class="row"><div class="label">R：硬さ F/R</div><div><div class="barwrap"><div id="b3" class="bar r"></div></div><div class="rng"><span id="rg3" style="left:0;width:0"></span></div><div style="font-size:12px;color:#9aa4b2">中心 <span id="n3" class="num">-</span> / 範囲 <span id="r3" class="num">-</span></div></div></div>
+      
+      <div style="height:1px;background:#ffffff30;margin:16px 0"></div>
+      <div style="font-weight:700; margin-bottom:10px;">中庸軸の両側パターン</div>
       <div id="variants" class="variants"></div>
-      <div class="foot">注：本診断はオリジナルの価値回路モデルです。MBTI等の公式ツールではありません。</div>
+      <div class="foot">注：本診断はオリジナルの価値回路モデルです。</div>
     </aside>
   </div>
 </div>
+
 <script>
-// 先頭付近に追加（関数群の上あたり）
-const RESULT_PANEL = () => document.querySelector('aside.card');
+// 設定と定数
+const CONFIG = {
+  ATLAS_BASE: "https://zacky-gpt.github.io/tdr-site/atlas/#", // アトラスのURL
+  DATA_URL: "../data/types.json", // タイプデータのパス
+  PER_PAGE: 10
+};
+
 const isMobile = () => matchMedia('(hover: none) and (pointer: coarse)').matches;
-
 let TYPES_MAP = new Map();
+let currentResultName = ""; // シェア用に保存
 
+// データ読み込み（エラーハンドリング強化）
 async function loadTypes() {
   try {
-    const res = await fetch("../data/types.json");   // test/ から見た相対
+    const res = await fetch(CONFIG.DATA_URL);
+    if (!res.ok) throw new Error("Network response was not ok");
     const list = await res.json();
     TYPES_MAP = new Map(list.map(t => [t.code || t.id, t]));
   } catch (e) {
-    console.warn("types.json を読めませんでした:", e);
+    console.warn("types.json 読込失敗。ローカルロジックで動作します:", e);
+    // ここでデフォルトデータをセットするなどのフォールバックも可能
   }
 }
 
-
-  
 // 30問（TDRに対応）
 const Q = [
   {t:"急な誘いでも、あまり考えずに参加する。",w:{ie:0.7,t:0.3},rev:false},
@@ -158,35 +177,42 @@ const Q = [
   {t:"実験的なやり方を試すことを恐れない。",w:{ie:0.7,d:0.3},rev:false},
 ];
 
-const PER_PAGE = 10;
 let page = 0;
 const answers = new Array(Q.length).fill(null);
+
+// DOM Elements
 const quiz = document.getElementById("quiz");
 const backBtn = document.getElementById("backBtn");
 const nextBtn = document.getElementById("nextBtn");
 const finishBtn = document.getElementById("finishBtn");
+const shareBtn = document.getElementById("shareBtn");
 const prog = document.getElementById("prog");
 const pcl = document.getElementById("pcl");
 
 function renderPage(){
-  const start = page*PER_PAGE;
-  const slice = Q.slice(start, start+PER_PAGE);
+  const start = page * CONFIG.PER_PAGE;
+  const slice = Q.slice(start, start + CONFIG.PER_PAGE);
   quiz.innerHTML = slice.map((q,i)=>{
     const idx = start + i;
     const v = answers[idx] ?? 50;
+    const isMoved = answers[idx] !== null && answers[idx] !== 50; 
+    const activeClass = isMoved ? "active" : "";
+    
     return `
       <div class="q">
-        <div>${idx+1}. ${q.t}</div>
+        <div style="margin-bottom:6px; font-weight:500;">${idx+1}. ${q.t}</div>
         <div class="range">
-          <input type="range" min="0" max="100" step="1"
+          <input type="range" min="0" max="100" step="1" class="${activeClass}" id="rng${idx}"
                  value="${v}" oninput="setAns(${idx},this.valueAsNumber)">
-          <span class="bubble" id="bubble${idx}">${v}</span>
+          <span class="bubble ${activeClass}" id="bubble${idx}">${v}</span>
         </div>
-        <div class="scale"><span>0</span><span>50</span><span>100</span></div>
+        <div class="scale"><span>No</span><span>Neutral</span><span>Yes</span></div>
       </div>`;
   }).join("");
 
   backBtn.disabled = (page===0);
+  backBtn.style.opacity = (page===0) ? "0.3" : "1";
+  
   nextBtn.classList.toggle("hidden", page===2);
   finishBtn.classList.toggle("hidden", page!==2);
 
@@ -198,7 +224,19 @@ function renderPage(){
 window.setAns = function(idx, v){
   answers[idx] = v;
   const b = document.getElementById(`bubble${idx}`);
-  if(b) b.textContent = v;
+  const r = document.getElementById(`rng${idx}`);
+  
+  if(b) {
+    b.textContent = v;
+    // 視覚的フィードバック：50から動かしたら色をつける（流動性の可視化）
+    if (v !== 50) {
+      b.classList.add("active");
+      r.classList.add("active");
+    } else {
+      b.classList.remove("active");
+      r.classList.remove("active");
+    }
+  }
 };
 
 backBtn.onclick = () => {
@@ -207,48 +245,37 @@ backBtn.onclick = () => {
 };
 
 nextBtn.onclick = () => {
-  if (page < 2) { 
-    page++; 
-    renderPage(); 
-  }
-  // モバイルでも必ずトップに戻る
+  if (page < 2) { page++; renderPage(); }
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
 finishBtn.onclick = () => {
   run();
-  // モバイルはトップへ戻さず、結果パネルの先頭へだけ移動
+  const el = document.getElementById("resultPanel");
+  // モバイルでは結果パネルへスクロール
   if (isMobile()) {
-    const el = RESULT_PANEL();
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   } else {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 };
 
-//コード→名前・説明を取るヘルパ
-function getTypeInfo(code){
-  const t = TYPES_MAP.get(code);
-  if (t) return { name: t.name, desc: t.desc };
-  // フォールバック（万一読み込めなかった時）
-  const [ie,tv,dv,rv] = [code[0], code[2], code[3], code[4]];
-  return { name: titleFromLetters(ie,tv,dv,rv), desc: descFromLetters(ie,tv,dv,rv) };
-}
-  
-// ---- ここから集計（中央値50ベース） ----
+// シェア機能（循環の拡張）
+window.shareResult = function() {
+  const text = `【TDR4軸性格診断】\n私の診断結果は「${currentResultName}」でした。\n\n温度・深度・硬度・内外の可動域を測定。`;
+  const url = "https://zacky-gpt.github.io/tdr-site/"; // あなたのサイトURL
+  const tags = "TDR診断,性格診断";
+  const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}&hashtags=${tags}`;
+  window.open(intent, '_blank');
+};
+
+// 集計ロジック
 function median(arr){
   if(arr.length===0) return 0;
   const s=[...arr].sort((a,b)=>a-b);
   const m=Math.floor(s.length/2);
   return s.length%2? s[m] : (s[m-1]+s[m])/2;
 }
-
-// μ判定ヘルパ（0..100）
-function letterFromMu(mu){ const lo=45, hi=55; return mu>=hi?1:mu<=lo?-1:0; }
-function toIE(mu){ const s=letterFromMu(mu); return s===1?'E':s===-1?'I':'M'; }
-function toT (mu){ const s=letterFromMu(mu); return s===1?'H':s===-1?'C':'M'; }
-function toD (mu){ const s=letterFromMu(mu); return s===1?'D':s===-1?'S':'M'; }
-function toR (mu){ const s=letterFromMu(mu); return s===1?'R':s===-1?'F':'M'; }
 
 function run(){
   const ans = Q.map((_,i)=> answers[i]===null ? 50 : answers[i]);
@@ -273,11 +300,14 @@ function run(){
   const center={}, centerMu={}, range={};
   axes.forEach(ax=>{
     const xs = raw[ax].length ? raw[ax] : [0];
+    // 単純平均ベースのμ
     const mu_raw = 50 + (sum[ax]/(cnt[ax]||1));
+    // ベイズ的補正(データ数が少ない時の暴れ防止)
     const n = xs.length, lambda = n/(n+6);
     const mu = 50 + lambda*(mu_raw-50);
     centerMu[ax]=mu;
 
+    // 中央値とMADによるロバストな範囲推定
     const med = median(xs);
     const mad = median(xs.map(v=>Math.abs(v-med)));
     const sigma = 1.4826*(mad||0);
@@ -286,22 +316,35 @@ function run(){
     const U = Math.max(20, Math.min(80, mu + k*sigma));
 
     const muClamped = Math.max(40, Math.min(60, mu));
-    const ui = 2 + ((muClamped-40)/20)*2;       // 2..4
+    const ui = 2 + ((muClamped-40)/20)*2; // 2..4 mapping
     center[ax] = ui;
 
     const spanUi = Math.max(0.05, Math.min(0.8, (U - L) / 40));
     range[ax] = spanUi;
   });
 
-  renderResult(center, range, centerMu);
+  renderResult(center, range);
 }
 
-// ラベル（UI帯2〜4の見た目用：タイトル生成は従来判定でOK）
-function labelIE(v){ if (v <= 2.5) return "I"; if (v >= 3.5) return "E"; return "M"; }
-function labelT(v){ if (v <= 2.5) return "C"; if (v >= 3.5) return "H"; return "M"; }
-function labelD(v){ if (v <= 2.5) return "S"; if (v >= 3.5) return "D"; return "M"; }
-function labelR(v){ if (v <= 2.5) return "F"; if (v >= 3.5) return "R"; return "M"; }
+function letterByBand(ax, ui, span){
+  const low  = Math.max(1, ui - span);
+  const high = Math.min(5, ui + span);
+  if (low <= 3.01 && high >= 2.99) return "M";
+  if (ax === "ie") return ui >= 3.5 ? "E" : "I";
+  if (ax === "t" ) return ui >= 3.5 ? "H" : "C";
+  if (ax === "d" ) return ui >= 3.5 ? "D" : "S";
+  if (ax === "r" ) return ui >= 3.5 ? "R" : "F";
+}
 
+function getTypeInfo(code){
+  const t = TYPES_MAP.get(code);
+  if (t) return { name: t.name, desc: t.desc };
+  // fallback logic
+  const [ie,tv,dv,rv] = [code[0], code[2], code[3], code[4]];
+  return { name: titleFromLetters(ie,tv,dv,rv), desc: descFromLetters(ie,tv,dv,rv) };
+}
+
+// フォールバック用の辞書（JSON読み込み失敗時用）
 function titleFromLetters(ie,t,d,r){
   if (ie==="E"&&t==="H"&&d==="D") return "灼熱の旗手";
   if (ie==="E"&&t==="H"&&d==="S") return "奔流の開拓者";
@@ -320,141 +363,101 @@ function descFromLetters(ie,t,d,r){
   return `${dir}${temp}${deep}${hard}`;
 }
 
-// これで既存の expandVariants を置き換え
 function expandVariants(code){
-  // 正規化：全角ハイフン等を半角に、空白除去、全大文字
-  let s = String(code || "")
-    .replace(/[－–—―ー]/g, "-")
-    .replace(/\s+/g, "")
-    .toUpperCase();
-
-  // 形式: I/E/M - H/C/M D/S/M R/F/M
+  let s = String(code || "").replace(/[－–—―ー]/g, "-").replace(/\s+/g, "").toUpperCase();
   const m = s.match(/^([IEM])\-([HCM])([DSM])([RFM])$/);
-  if(!m){
-    console.warn("expandVariants: code not matched:", code, "->", s);
-    return []; // パターン不一致なら空
-  }
+  if(!m) return [];
   const [, ie, t, d, r] = m;
-
   const pick = (x, a, b) => x === "M" ? [a, b] : [x];
-  const ieList = pick(ie, "I", "E");
-  const tList  = pick(t , "H", "C");
-  const dList  = pick(d , "D", "S");
-  const rList  = pick(r , "R", "F");
-
+  
   const out = [];
-  ieList.forEach(I => tList.forEach(T => dList.forEach(D => rList.forEach(R => {
-    out.push(`${I}-${T}${D}${R}`);
-  }))));
+  pick(ie, "I", "E").forEach(I => 
+    pick(t , "H", "C").forEach(T => 
+      pick(d , "D", "S").forEach(D => 
+        pick(r , "R", "F").forEach(R => out.push(`${I}-${T}${D}${R}`))
+      )
+    )
+  );
   return out;
 }
 
-  
 function renderVariants(code){
-  const BASE = "https://zacky-gpt.github.io/tdr-site/atlas/#";
   const container = document.getElementById("variants");
   if(!container) return;
-
+  
   const list = expandVariants(code);
   const safeList = (list && list.length) ? list : [code];
 
-  const html = safeList.map(c=>{
+  container.innerHTML = safeList.map(c=>{
     const { name, desc } = getTypeInfo(c);
-    const href = `${BASE}${c}`;
+    const href = `${CONFIG.ATLAS_BASE}${c}`;
     return `
-      <div class="vcard" role="button" tabindex="0"
-           onclick="window.open('${href}','_blank','noopener')"
-           onkeydown="if(event.key==='Enter'||event.key===' '){window.open('${href}','_blank','noopener')}">
+      <a class="vcard" href="${href}" target="_blank" rel="noopener">
         <div class="vtitle">${name} <span class="vcode">${c}</span></div>
         <div style="color:#cbd5e1;font-size:13px">${desc}</div>
-      </div>`;
+      </a>`;
   }).join("");
-
-  container.innerHTML = html;
 }
 
+function renderResult(center, range){
+  const ieL = letterByBand("ie", center.ie, range.ie);
+  const tL  = letterByBand("t" , center.t , range.t );
+  const dL  = letterByBand("d" , center.d , range.d );
+  const rL  = letterByBand("r" , center.r , range.r );
+  const code = `${ieL}-${tL}${dL}${rL}`;
 
-
-
-
-function arch([ie,t,d,r]){
-  const dir=ie<=2.5?"内向基調で":ie>=3.5?"外向基調で":"中間基調で";
-  const temp=t<=2.5?"低温、":t>=3.5?"高温、":"中温、";
-  const deep=d<=2.5?"浅く、":d>=3.5?"深く、":"中深で、";
-  const hard=r<=2.5?"柔軟。":r>=3.5?"構造的。":"中硬。";
-  let title="中庸の航海者";
-  if (ie>=3.5&&t>=3.5&&d<=3.5) title="奔流の開拓者";
-  else if (ie<=2.5&&d>=3.5&&r>=3.5) title="静謐の守護者";
-  else if (ie<=2.5&&t<=2.5&&d>=3.5) title="冷き深海の思索者";
-  else if (ie>=3.5&&t>=3.5&&d>=3.5) title="灼熱の旗手";
-  else if (t<=2.5&&r<=2.5) title="しなる風の調停者";
-  else if (d>=3.5&&r<=2.5) title="柔らかな賢者";
-  else if (d<=2.5&&r>=3.5) title="鋭刃のスプリンター";
-  const desc=`${dir}${temp}${deep}${hard}`;
-  return {title,desc,tags:[dir.replace("基調で",""),temp.replace("、",""),deep.replace("、",""),hard.replace("。","")]};
-}
-
-function renderResult(center, range, muMap){
-  const vals=[center.ie,center.t,center.d,center.r];
-  const a=arch(vals);
-  document.getElementById("title").textContent="結果："+a.title;
-  document.getElementById("desc").textContent=a.desc;
-  document.getElementById("tags").innerHTML=a.tags.map(s=>`<span class="tag">${s}</span>`).join("");
-
-  // μベースでコード判定
-const ieL = letterByBand("ie", center.ie, range.ie);
-const tL  = letterByBand("t" , center.t , range.t );
-const dL  = letterByBand("d" , center.d , range.d );
-const rL  = letterByBand("r" , center.r , range.r );
-const code = `${ieL}-${tL}${dL}${rL}`;
- // ← ここを types.json ベースに
   const info = getTypeInfo(code);
+  currentResultName = info.name; // シェア用に保存
+  
   document.getElementById("title").textContent = `結果：${info.name}`;
   document.getElementById("desc").textContent  = info.desc;
+  document.getElementById("code").innerHTML = `<a href="${CONFIG.ATLAS_BASE}${code}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${code}</a>`;
   
-  const atlasBase = "../atlas/#"; // パス調整
-  document.getElementById("code").innerHTML =
-    `<a href="${atlasBase}${code}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${code}</a>`;
-    renderVariants(code);
+  // タグ生成
+  const tags = [
+    ieL==="E"?"外向":ieL==="I"?"内向":"内外中庸",
+    tL==="H"?"HighTemp":tL==="C"?"LowTemp":"適温",
+    dL==="D"?"Deep":dL==="S"?"Shallow":"中深",
+    rL==="R"?"Rigid":rL==="Flexible":"中硬"
+  ];
+  document.getElementById("tags").innerHTML = tags.map(s=>`<span class="tag">${s}</span>`).join("");
 
-  const widths = vals.map(v=>((v-1)/4*100));
+  // シェアボタンを表示
+  document.getElementById("shareBtn").classList.remove("hidden");
+
+  renderVariants(code);
+
+  // グラフ描画
+  const vals=[center.ie,center.t,center.d,center.r];
   const ids=["b0","b1","b2","b3"];
   const rngIds=["rg0","rg1","rg2","rg3"];
   const numIds=[["n0","r0"],["n1","r1"],["n2","r2"],["n3","r3"]];
-  widths.forEach((w,i)=>{
+  const keys=["ie","t","d","r"];
+
+  vals.forEach((v,i)=>{
+    const w = ((v-1)/4*100);
     document.getElementById(ids[i]).style.width = w+"%";
-    const span = range[["ie","t","d","r"][i]];
-    const low = Math.max(1, vals[i]-span);
-    const high = Math.min(5, vals[i]+span);
+    
+    const span = range[keys[i]];
+    const low = Math.max(1, v-span);
+    const high = Math.min(5, v+span);
     const lowW = ((low-1)/4*100);
     const highW = ((high-1)/4*100);
+    
     const el = document.getElementById(rngIds[i]);
     el.style.left = lowW+"%";
     el.style.width = Math.max(0, highW-lowW)+"%";
-    document.getElementById(numIds[i][0]).textContent = vals[i].toFixed(2);
+    
+    document.getElementById(numIds[i][0]).textContent = v.toFixed(2);
     document.getElementById(numIds[i][1]).textContent = (span*2).toFixed(2);
   });
 }
 
-// 3を跨いだら M、それ以外は上側/下側で片側に決める
-function letterByBand(ax, ui, span){
-  const low  = Math.max(1, ui - span);
-  const high = Math.min(5, ui + span);
-  // 少数の境界ぶれ対策で ±0.01 の遊び
-  if (low <= 3.01 && high >= 2.99) return "M";
-  if (ax === "ie") return ui >= 3.5 ? "E" : "I";
-  if (ax === "t" ) return ui >= 3.5 ? "H" : "C";
-  if (ax === "d" ) return ui >= 3.5 ? "D" : "S";
-  if (ax === "r" ) return ui >= 3.5 ? "R" : "F";
-}
-
-loadTypes().then(() => {
-  renderPage();   // ← 既存の初回描画
-});
-  
-renderPage();
-    
+// 初期化プロセス
+(async () => {
+  await loadTypes();
+  renderPage();
+})();
 </script>
-
 </body>
 </html>
