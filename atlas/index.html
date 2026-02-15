@@ -138,3 +138,49 @@
     <label>D（深さ）</label>
     <select data-axis="d">
       <option value="M">M（中庸）</option>
+@@ -266,35 +316,45 @@ function setupFilter(types){
+
+    // 詳細とフィルタ
+    setupFilter(types);
+
+    // ハッシュ着地
+    if (location.hash) {
+      const el = document.querySelector(location.hash);
+      el && el.scrollIntoView({behavior:"smooth", block:"start"});
+    }
+
+    // ページ内リンクをスムーススクロール
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener("click", e=>{
+        const id = a.getAttribute("href");
+        const el = document.querySelector(id);
+        if(el){
+          e.preventDefault();
+          history.replaceState(null,"",id);
+          el.scrollIntoView({behavior:"smooth", block:"start"});
+        }
+      });
+    });
+
+  }catch(err){
+    console.error(err);
+    const msg = String(err);
+    document.getElementById("grid").innerHTML =
+      `<div class="sub">読み込み失敗：${msg}</div>`;
+    document.getElementById("details").innerHTML = `
+      <section class="card">
+        <div class="sect">
+          <div style="font-size:18px;font-weight:800">図鑑データを読み込めませんでした</div>
+          <p style="margin-top:8px">このページは <code>../data/types.json</code> を読み込んで表示します。ファイルを直接開く（<code>file://</code>）と読み込みに失敗することがあります。</p>
+          <p style="margin-top:8px">ローカル確認時は、プロジェクト直下で次のコマンドを実行して <code>http://localhost:4173/atlas/</code> で開いてください。</p>
+          <p><code>python3 -m http.server 4173</code></p>
+        </div>
+      </section>`;
+  }
+})();
+  
+</script>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+</body>
+</html>
