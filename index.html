@@ -1,69 +1,226 @@
-<!DOCTYPE html><html lang="ja"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TDR 4軸｜性格診断と16分類図鑑</title>
-  <!-- OGP設定 -->
-<meta name="description" content="温度・深度・硬度・内外の4軸で“可動域”を測るTDR式診断。">
-<meta property="og:title" content="TDR 4軸"><meta property="og:description" content="“動かせる自分”を測る診断と16分類図鑑。">
-<meta property="og:type" content="website"><meta property="og:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png">
-<link rel="icon" href="favicon.ico" type="image/x-icon">
-  <!-- Twitterカード対応 -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="TDR 4軸性格診断" />
-<meta name="twitter:description" content="動かせる自分を見つける診断と16分類図鑑。" />
-<meta name="twitter:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png" />
-
-<style>
-body{margin:0;background:#0f1115;color:#e8ecf1;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans JP",sans-serif}
-.wrap{max-width:860px;margin:0 auto;padding:20px}
-.card{background:#171a21;border:1px solid #ffffff20;border-radius:14px;padding:18px;margin:10px 0}
-a.btn{display:inline-block;padding:10px 14px;border-radius:10px;background:#7dd3fc;color:#081019;font-weight:700;text-decoration:none;margin-right:8px}
-.sub{color:#9aa4b2}
-.hero{display:block;max-width:100%;max-height:600px;margin:20px auto;border-radius:12px}
-
-  
-</style></head><body><div class="wrap">
-
-  
-  <h1>TDR 4軸｜性格診断と16分類図鑑</h1>
-
-  <!-- ここにタイトル画像と説明を追加 -->
-  <img src="images/tdr-hero.png" alt="TDR 4-axis personality test" class="hero">
-  <div class="card">
-    <h2>診断の考え方</h2>
-    <p>
-      多くの性格診断は「あなたは〇〇タイプです」と枠を決めがちですが、<br>
-      本来、人はひとつの型に閉じ込められる存在ではありません。<br><br>
-
-      この診断では <b>温度・深さ・硬さ・方向性</b> を「メタファー」として扱います。<br>
-      「私は熱いけど柔らかい」「冷静だけど深い」といった感覚で、自分を立体的にイメージできます。<br><br>
-
-      大事なのは「地続きに行き来できること」。<br>
-      「私は○○タイプだから仕方ない」ではなく、<br>
-      「今日は少し冷たく」「ここは柔らかく」と選べる感覚を持つことです。<br><br>
-
-      この診断は分断ではなく <b>橋渡し</b> を意識しています。<br>
-      違うタイプを知ることは制限ではなく、むしろ <b>自分を拡張するヒント</b> になります。
-    </p>
-  </div>
-
-  <div class="card">
-    <h2>はじめる</h2>
-    <p><a class="btn" href="test/">診断を受ける</a><a class="btn" href="atlas/">16分類図鑑を見る</a></p>
-    <p class="sub">プライバシー：入力はブラウザ内のみで処理。サーバ送信なし。</p>
-    <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a>
-    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-  </div>
-  <div class="card">
-    <h2>モデルについて</h2>
-    <p class="sub">本診断はオリジナルの価値回路モデル（TDR）です。医学的・臨床的評価ではありません。<br>
-    製作者:zacky <a href="https://note.com/gentle_toucan642"target="_blank">noteはコチラ</a></p>
-  </div>
-  
-</div></body></html>
-
-
-
-
-
-
-
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/index.html b/index.html
+index bde5e6a36f883589627f01b1eccca171a1980ceb..debe78ddd588b8c66ae622e65c3be9349a2b0e3d 100644
+--- a/index.html
++++ b/index.html
+@@ -1,69 +1,148 @@
+-<!DOCTYPE html><html lang="ja"><head>
+-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+-<title>TDR 4軸｜性格診断と16分類図鑑</title>
+-  <!-- OGP設定 -->
+-<meta name="description" content="温度・深度・硬度・内外の4軸で“可動域”を測るTDR式診断。">
+-<meta property="og:title" content="TDR 4軸"><meta property="og:description" content="“動かせる自分”を測る診断と16分類図鑑。">
+-<meta property="og:type" content="website"><meta property="og:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png">
+-<link rel="icon" href="favicon.ico" type="image/x-icon">
+-  <!-- Twitterカード対応 -->
+-<meta name="twitter:card" content="summary_large_image" />
+-<meta name="twitter:title" content="TDR 4軸性格診断" />
+-<meta name="twitter:description" content="動かせる自分を見つける診断と16分類図鑑。" />
+-<meta name="twitter:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png" />
+-
+-<style>
+-body{margin:0;background:#0f1115;color:#e8ecf1;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans JP",sans-serif}
+-.wrap{max-width:860px;margin:0 auto;padding:20px}
+-.card{background:#171a21;border:1px solid #ffffff20;border-radius:14px;padding:18px;margin:10px 0}
+-a.btn{display:inline-block;padding:10px 14px;border-radius:10px;background:#7dd3fc;color:#081019;font-weight:700;text-decoration:none;margin-right:8px}
+-.sub{color:#9aa4b2}
+-.hero{display:block;max-width:100%;max-height:600px;margin:20px auto;border-radius:12px}
+-
+-  
+-</style></head><body><div class="wrap">
+-
+-  
+-  <h1>TDR 4軸｜性格診断と16分類図鑑</h1>
+-
+-  <!-- ここにタイトル画像と説明を追加 -->
+-  <img src="images/tdr-hero.png" alt="TDR 4-axis personality test" class="hero">
+-  <div class="card">
+-    <h2>診断の考え方</h2>
+-    <p>
+-      多くの性格診断は「あなたは〇〇タイプです」と枠を決めがちですが、<br>
+-      本来、人はひとつの型に閉じ込められる存在ではありません。<br><br>
+-
+-      この診断では <b>温度・深さ・硬さ・方向性</b> を「メタファー」として扱います。<br>
+-      「私は熱いけど柔らかい」「冷静だけど深い」といった感覚で、自分を立体的にイメージできます。<br><br>
+-
+-      大事なのは「地続きに行き来できること」。<br>
+-      「私は○○タイプだから仕方ない」ではなく、<br>
+-      「今日は少し冷たく」「ここは柔らかく」と選べる感覚を持つことです。<br><br>
+-
+-      この診断は分断ではなく <b>橋渡し</b> を意識しています。<br>
+-      違うタイプを知ることは制限ではなく、むしろ <b>自分を拡張するヒント</b> になります。
+-    </p>
+-  </div>
+-
+-  <div class="card">
+-    <h2>はじめる</h2>
+-    <p><a class="btn" href="test/">診断を受ける</a><a class="btn" href="atlas/">16分類図鑑を見る</a></p>
+-    <p class="sub">プライバシー：入力はブラウザ内のみで処理。サーバ送信なし。</p>
+-    <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a>
+-    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+-  </div>
+-  <div class="card">
+-    <h2>モデルについて</h2>
+-    <p class="sub">本診断はオリジナルの価値回路モデル（TDR）です。医学的・臨床的評価ではありません。<br>
+-    製作者:zacky <a href="https://note.com/gentle_toucan642"target="_blank">noteはコチラ</a></p>
+-  </div>
+-  
+-</div></body></html>
+-
+-
+-
+-
+-
+-
+-
++<!DOCTYPE html><html lang="ja"><head>
++<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
++<title>TDR 4軸｜性格診断と16分類図鑑</title>
++  <!-- OGP設定 -->
++<meta name="description" content="温度・深度・硬度・内外の4軸で“可動域”を測るTDR式診断。">
++<meta property="og:title" content="TDR 4軸"><meta property="og:description" content="“動かせる自分”を測る診断と16分類図鑑。">
++<meta property="og:type" content="website"><meta property="og:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png">
++<link rel="icon" href="favicon.ico" type="image/x-icon">
++  <!-- Twitterカード対応 -->
++<meta name="twitter:card" content="summary_large_image" />
++<meta name="twitter:title" content="TDR 4軸性格診断" />
++<meta name="twitter:description" content="動かせる自分を見つける診断と16分類図鑑。" />
++<meta name="twitter:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png" />
++
++<style>
++:root{
++  --bg:#0f1115;
++  --panel:#171a21cc;
++  --line:#ffffff24;
++  --text:#e8ecf1;
++  --muted:#9aa4b2;
++  --accent:#7dd3fc;
++  --accent-strong:#38bdf8;
++}
++*{box-sizing:border-box}
++body{
++  margin:0;
++  color:var(--text);
++  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
++  background:
++    radial-gradient(circle at 10% -10%, #38bdf81f 0%, transparent 50%),
++    radial-gradient(circle at 90% 10%, #c084fc14 0%, transparent 45%),
++    linear-gradient(180deg,#0f1115 0%,#131722 60%,#0f1115 100%);
++  line-height:1.8;
++}
++.wrap{max-width:920px;margin:0 auto;padding:32px 20px 56px}
++.hero-head{padding:10px 4px 2px}
++h1{
++  margin:0;
++  font-size:clamp(1.8rem,3.8vw,2.6rem);
++  letter-spacing:.02em;
++}
++.lead{color:var(--muted);margin:8px 0 0;font-size:1.05rem}
++.card{
++  position:relative;
++  overflow:hidden;
++  background:var(--panel);
++  backdrop-filter: blur(6px);
++  border:1px solid var(--line);
++  border-radius:18px;
++  padding:20px;
++  margin:14px 0;
++  box-shadow:0 10px 30px #00000030;
++}
++.card::before{
++  content:"";
++  position:absolute;
++  inset:0;
++  background:linear-gradient(120deg,transparent,rgba(255,255,255,.06),transparent);
++  transform:translateX(-120%);
++  transition:transform .8s ease;
++}
++.card:hover::before{transform:translateX(120%)}
++.card h2{margin-top:0;font-size:1.2rem}
++.sub{color:var(--muted)}
++.hero-wrap{
++  margin:20px 0;
++  padding:10px;
++  border-radius:18px;
++  background:linear-gradient(130deg,#38bdf829,#7dd3fc14,#c084fc1f);
++  border:1px solid #ffffff2d;
++}
++.hero{display:block;max-width:100%;max-height:600px;margin:0 auto;border-radius:12px}
++.cta-row{display:flex;flex-wrap:wrap;gap:10px}
++a.btn{
++  display:inline-block;
++  padding:11px 16px;
++  border-radius:12px;
++  background:linear-gradient(135deg,var(--accent),var(--accent-strong));
++  color:#081019;
++  font-weight:700;
++  text-decoration:none;
++  transition:transform .2s ease, box-shadow .2s ease;
++  box-shadow:0 8px 20px #38bdf84d;
++}
++a.btn:hover{transform:translateY(-1px);box-shadow:0 12px 26px #38bdf870}
++.meta{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;padding:0;list-style:none}
++.meta li{
++  padding:4px 10px;
++  border-radius:999px;
++  border:1px solid var(--line);
++  color:#cdd6e3;
++  font-size:.85rem;
++  background:#ffffff0a;
++}
++.note-link{color:#9bdffc}
++@media (max-width:640px){
++  .wrap{padding:24px 14px 40px}
++  .card{padding:16px}
++}
++</style></head><body><div class="wrap">
++
++  <header class="hero-head">
++    <ul class="meta">
++      <li>4軸モデル</li>
++      <li>16分類図鑑</li>
++      <li>ブラウザ内完結</li>
++    </ul>
++    <h1>TDR 4軸｜性格診断と16分類図鑑</h1>
++    <p class="lead">「型にはめる」より「行き来できる自分」を育てるための診断です。</p>
++  </header>
++
++  <!-- ここにタイトル画像と説明を追加 -->
++  <div class="hero-wrap">
++    <img src="images/tdr-hero.png" alt="TDR 4-axis personality test" class="hero">
++  </div>
++  <div class="card">
++    <h2>診断の考え方</h2>
++    <p>
++      多くの性格診断は「あなたは〇〇タイプです」と枠を決めがちですが、<br>
++      本来、人はひとつの型に閉じ込められる存在ではありません。<br><br>
++
++      この診断では <b>温度・深さ・硬さ・方向性</b> を「メタファー」として扱います。<br>
++      「私は熱いけど柔らかい」「冷静だけど深い」といった感覚で、自分を立体的にイメージできます。<br><br>
++
++      大事なのは「地続きに行き来できること」。<br>
++      「私は○○タイプだから仕方ない」ではなく、<br>
++      「今日は少し冷たく」「ここは柔らかく」と選べる感覚を持つことです。<br><br>
++
++      この診断は分断ではなく <b>橋渡し</b> を意識しています。<br>
++      違うタイプを知ることは制限ではなく、むしろ <b>自分を拡張するヒント</b> になります。
++    </p>
++  </div>
++
++  <div class="card">
++    <h2>はじめる</h2>
++    <p class="cta-row"><a class="btn" href="test/">診断を受ける</a><a class="btn" href="atlas/">16分類図鑑を見る</a></p>
++    <p class="sub">プライバシー：入力はブラウザ内のみで処理。サーバ送信なし。</p>
++    <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a>
++    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
++  </div>
++  <div class="card">
++    <h2>モデルについて</h2>
++    <p class="sub">本診断はオリジナルの価値回路モデル（TDR）です。医学的・臨床的評価ではありません。<br>
++    製作者:zacky <a class="note-link" href="https://note.com/gentle_toucan642"target="_blank">noteはコチラ</a></p>
++  </div>
++
++</div></body></html>
+ 
+EOF
+)
