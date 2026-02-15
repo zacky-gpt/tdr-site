@@ -75,15 +75,14 @@
   .sect{border-left:4px solid #22d3ee;padding-left:10px;margin-top:6px}
   .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
   .tag{font-size:12px;padding:3px 8px;border-radius:999px;background:#ffffff10;border:1px solid #ffffff20}
- .foot{color:var(--muted);font-size:12px;margin-top:8px}
+.foot{color:var(--muted);font-size:12px;margin-top:8px}
 .toplink{
-    position:fixed;right:14px;bottom:80px;z-index:9999;
+  position:fixed;right:14px;bottom:80px;z-index:9999;
     background:linear-gradient(135deg,var(--accent),var(--accent-strong));color:#081019;border:none;border-radius:999px;
     padding:10px 14px;font-weight:800;cursor:pointer;
     box-shadow:0 8px 20px #38bdf84d;
     opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
   }
-
  .toplink.show{ opacity:1; pointer-events:auto; }
   .toplink:hover{transform:translateY(-1px)}
 
@@ -113,13 +112,29 @@
   .filterbar .ghost:hover{background:#ffffff0d;border-color:var(--accent)}
   .filterbar .count{font-size:12px; color:var(--muted)}
   @media (max-width:700px){ .filterbar{gap:8px} .filterbar .ghost{order:5; margin-left:0} }
-
-  
 </style>
 </head>
 <body>
-
-<label>D（深さ）</label>
+<!-- 固定フィルタバー -->
+<div id="filterBar" class="filterbar">
+  <div class="row">
+    <label>I/E</label>
+    <select data-axis="ie">
+      <option value="M">M（両方）</option>
+      <option value="I">I</option>
+      <option value="E">E</option>
+    </select>
+  </div>
+  <div class="row">
+    <label>T（温度）</label>
+    <select data-axis="t">
+      <option value="M">M（中庸）</option>
+      <option value="C">C（低温）</option>
+      <option value="H">H（高温）</option>
+    </select>
+  </div>
+  <div class="row">
+    <label>D（深さ）</label>
     <select data-axis="d">
       <option value="M">M（中庸）</option>
       <option value="S">S（浅）</option>
