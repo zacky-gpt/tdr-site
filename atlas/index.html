@@ -357,10 +357,10 @@ function renderDetails(list){
           <div>
             ${longdesc ? `<div class="longdesc">${longdesc}</div>` : ""}
             <div class="adjusts">
-              <div class="adjust"><strong>I / E</strong>${adjust["I/E"] || "-"}</div>
-              <div class="adjust"><strong>H / C</strong>${adjust["H/C"] || "-"}</div>
-              <div class="adjust"><strong>D / S</strong>${adjust["D/S"] || "-"}</div>
-              <div class="adjust"><strong>R / F</strong>${adjust["R/F"] || "-"}</div>
+              <div class="adjust"><strong>内向 / 外向の調整</strong>${adjust["I/E"] || "-"}</div>
+              <div class="adjust"><strong>冷静さ / 熱量の調整</strong>${adjust["H/C"] || "-"}</div>
+              <div class="adjust"><strong>浅さ / 深さの調整</strong>${adjust["D/S"] || "-"}</div>
+              <div class="adjust"><strong>柔軟さ / 構造の調整</strong>${adjust["R/F"] || "-"}</div>
             </div>
           </div>
         </div>
@@ -475,6 +475,8 @@ function setupFilter(types){
 </script>
 </body>
 </html>
+
+
 
 
 
