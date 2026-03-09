@@ -312,6 +312,21 @@ function splitLetters(code){
   return { ie:match[1], t:match[2], d:match[3], r:match[4] };
 }
 
+function expandTypeCode(code){
+  const normalized = String(code || "").replace(/[－–—―ー]/g, "-").replace(/\s+/g, "").toUpperCase();
+  const match = normalized.match(/^([IEM])\-([HCM])([DSM])([RFM])$/);
+  if (!match) return [];
+  const [, ie, t, d, r] = match;
+  const pick = (value, a, b) => value === "M" ? [a, b] : [value];
+  const ieList = pick(ie, "I", "E");
+  const tList = pick(t, "H", "C");
+  const dList = pick(d, "D", "S");
+  const rList = pick(r, "R", "F");
+  const out = [];
+  ieList.forEach((i) => tList.forEach((tt) => dList.forEach((dd) => rList.forEach((rr) => out.push(`${i}-${tt}${dd}${rr}`)))));
+  return out;
+}
+
 function renderDetails(list){
   const details = document.getElementById("details");
   details.innerHTML = list.map((type) => {
@@ -364,13 +379,20 @@ function matchCode(code, state){
 }
 
 function setupFilter(types){
+  const params = new URLSearchParams(location.search);
+  let exactType = String(params.get("type") || "").toUpperCase();
+  const expandedTypes = new Set(exactType ? expandTypeCode(exactType) : []);
   const state = { ie:"M", t:"M", d:"M", r:"M" };
   const bar = document.getElementById("filterBar");
   const selects = bar.querySelectorAll("select[data-axis]");
   const hit = document.getElementById("hitCount");
 
   const apply = () => {
-    const filtered = types.filter((type) => matchCode(type.code, state));
+    const filtered = types.filter((type) => {
+      const code = String(type.code || type.id || "").toUpperCase();
+      if (expandedTypes.size > 0) return expandedTypes.has(code);
+      return matchCode(code, state);
+    });
     renderDetails(filtered);
     hit.textContent = String(filtered.length);
     if (location.hash) {
@@ -382,6 +404,7 @@ function setupFilter(types){
   selects.forEach((select) => {
     const axis = select.dataset.axis;
     select.value = state[axis];
+    select.disabled = expandedTypes.size > 0;
     select.addEventListener("change", (event) => {
       state[axis] = event.target.value;
       apply();
@@ -390,7 +413,15 @@ function setupFilter(types){
 
   document.getElementById("resetFilter").addEventListener("click", () => {
     state.ie = state.t = state.d = state.r = "M";
-    selects.forEach((select) => { select.value = "M"; });
+    selects.forEach((select) => {
+      select.value = "M";
+      select.disabled = false;
+    });
+    if (expandedTypes.size > 0) {
+      exactType = "";
+      expandedTypes.clear();
+      history.replaceState(null, "", location.pathname + location.hash);
+    }
     apply();
   });
 
@@ -444,4 +475,7 @@ function setupFilter(types){
 </script>
 </body>
 </html>
+
+
+
 

@@ -529,7 +529,7 @@ function renderVariants(code){
   container.innerHTML = safeList.map((item) => {
     const info = getTypeInfo(item);
     return `
-      <a class="vcard" href="../atlas/#${item}" target="_blank" rel="noopener">
+      <a class="vcard" href="../atlas/?type=${item}#${item}" target="_blank" rel="noopener">
         <div class="vtitle">${info.name}</div>
         <div style="color:#d5e7f7; font-size:.92rem; margin-bottom:6px">${item}</div>
         <div style="color:var(--muted); font-size:.9rem">${info.desc}</div>
@@ -565,7 +565,7 @@ function renderResult(center, range){
   document.getElementById("title").textContent = `結果: ${info.name}`;
   document.getElementById("desc").textContent = info.desc;
   document.getElementById("tags").innerHTML = archInfo.tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
-  document.getElementById("code").innerHTML = `<a href="../atlas/#${code}" target="_blank" rel="noopener" style="text-decoration:none; color:inherit">${code}</a>`;
+  document.getElementById("code").innerHTML = `<a href="../atlas/?type=${code}#${code}" target="_blank" rel="noopener" style="text-decoration:none; color:inherit">${code}</a>`;
   renderVariants(code);
 
   const widths = values.map((value) => ((value - 1) / 4) * 100);
@@ -594,4 +594,5 @@ renderPage();
 </script>
 </body>
 </html>
+
 
