@@ -1,148 +1,354 @@
-<!DOCTYPE html><html lang="ja"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TDR 4軸｜性格診断と16分類図鑑</title>
-  <!-- OGP設定 -->
-<meta name="description" content="温度・深度・硬度・内外の4軸で“可動域”を測るTDR式診断。">
-<meta property="og:title" content="TDR 4軸"><meta property="og:description" content="“動かせる自分”を測る診断と16分類図鑑。">
-<meta property="og:type" content="website"><meta property="og:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png">
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TDR 4軸性格診断 | 診断と16分類アトラス</title>
+<meta name="description" content="温度・深度・硬度・内外の4軸で、自分の可動域を見つけるTDR式診断。診断テストと16分類アトラスをひとつの世界観で体験できます。">
+<meta property="og:title" content="TDR 4軸性格診断">
+<meta property="og:description" content="動かせる自分を見つける診断と16分類アトラス。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TDR 4軸性格診断">
+<meta name="twitter:description" content="動かせる自分を見つける診断と16分類アトラス。">
+<meta name="twitter:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png">
 <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <!-- Twitterカード対応 -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="TDR 4軸性格診断" />
-<meta name="twitter:description" content="動かせる自分を見つける診断と16分類図鑑。" />
-<meta name="twitter:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png" />
-
 <style>
 :root{
-  --bg:#0f1115;
-  --panel:#171a21cc;
-  --line:#ffffff24;
-  --text:#e8ecf1;
-  --muted:#9aa4b2;
-  --accent:#7dd3fc;
-  --accent-strong:#38bdf8;
+  --bg:#07111f;
+  --panel:rgba(8,17,33,.72);
+  --panel-strong:rgba(12,24,46,.9);
+  --line:rgba(255,255,255,.12);
+  --line-strong:rgba(142,210,255,.35);
+  --text:#eff7ff;
+  --muted:#a9bdd4;
+  --cyan:#74e1ff;
+  --gold:#ffd47a;
+  --rose:#ff8fc3;
+  --shadow:0 24px 60px rgba(0,0,0,.35);
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
   margin:0;
   color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
+  font-family:"Yu Gothic UI","Hiragino Sans","Noto Sans JP",sans-serif;
   background:
-    radial-gradient(circle at 10% -10%, #38bdf81f 0%, transparent 50%),
-    radial-gradient(circle at 90% 10%, #c084fc14 0%, transparent 45%),
-    linear-gradient(180deg,#0f1115 0%,#131722 60%,#0f1115 100%);
-  line-height:1.8;
+    radial-gradient(circle at 12% 12%, rgba(116,225,255,.18), transparent 26%),
+    radial-gradient(circle at 86% 10%, rgba(255,143,195,.14), transparent 24%),
+    radial-gradient(circle at 50% 120%, rgba(255,212,122,.16), transparent 30%),
+    linear-gradient(180deg, #08111f 0%, #0d1830 44%, #091221 100%);
+  line-height:1.7;
+  min-height:100vh;
 }
-.wrap{max-width:920px;margin:0 auto;padding:32px 20px 56px}
-.hero-head{padding:10px 4px 2px}
-h1{
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size:32px 32px;
+  mask-image:linear-gradient(180deg, rgba(255,255,255,.42), transparent 78%);
+  pointer-events:none;
+}
+a{color:inherit}
+.wrap{width:min(1180px, calc(100% - 32px)); margin:0 auto}
+.site-nav{
+  position:sticky;
+  top:0;
+  z-index:20;
+  backdrop-filter:blur(18px);
+  background:rgba(7,15,30,.62);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.site-nav-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:14px 0;
+}
+.brand{
+  font-family:"Yu Mincho","Hiragino Mincho ProN","MS PMincho",serif;
+  font-size:1.1rem;
+  letter-spacing:.14em;
+}
+.nav-links{display:flex; gap:10px; flex-wrap:wrap}
+.nav-links a{
+  text-decoration:none;
+  color:var(--muted);
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid transparent;
+}
+.nav-links a:hover{color:var(--text); border-color:rgba(255,255,255,.12); background:rgba(255,255,255,.04)}
+.hero{
+  padding:56px 0 28px;
+  display:grid;
+  grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);
+  gap:28px;
+  align-items:center;
+}
+.eyebrow{
+  display:inline-flex;
+  gap:10px;
+  align-items:center;
+  padding:8px 14px;
+  border-radius:999px;
+  background:rgba(116,225,255,.08);
+  border:1px solid rgba(116,225,255,.18);
+  color:#c9f5ff;
+  font-size:.86rem;
+}
+.hero h1{
+  margin:18px 0 14px;
+  font-family:"Yu Mincho","Hiragino Mincho ProN","MS PMincho",serif;
+  font-size:clamp(2.4rem,6vw,4.9rem);
+  line-height:1.05;
+  letter-spacing:.04em;
+}
+.hero p{
   margin:0;
-  font-size:clamp(1.8rem,3.8vw,2.6rem);
-  letter-spacing:.02em;
+  max-width:62ch;
+  color:var(--muted);
+  font-size:1.05rem;
 }
-.lead{color:var(--muted);margin:8px 0 0;font-size:1.05rem}
+.hero-actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:24px;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-height:50px;
+  padding:0 18px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  text-decoration:none;
+  font-weight:700;
+  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease,background .25s ease;
+}
+.btn.primary{
+  color:#08111f;
+  background:linear-gradient(135deg, var(--gold), #fff0c0 48%, var(--cyan));
+  box-shadow:0 18px 35px rgba(125,211,252,.22);
+  border-color:rgba(255,255,255,.28);
+}
+.btn.secondary{background:rgba(255,255,255,.04); color:var(--text)}
+.btn:hover{transform:translateY(-2px); border-color:var(--line-strong); box-shadow:var(--shadow)}
+.hero-side{
+  position:relative;
+  padding:18px;
+  border-radius:28px;
+  background:linear-gradient(160deg, rgba(8,17,33,.85), rgba(16,37,67,.7));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.hero-side::before{
+  content:"";
+  position:absolute;
+  inset:-20% auto auto -15%;
+  width:220px;
+  height:220px;
+  background:radial-gradient(circle, rgba(116,225,255,.32), transparent 70%);
+}
+.hero-visual{
+  position:relative;
+  overflow:hidden;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.02));
+}
+.hero-visual img{display:block; width:100%; height:auto}
+.hero-stats{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px}
+.stat{padding:14px; border-radius:18px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08)}
+.stat strong{display:block; font-size:1.6rem; line-height:1; margin-bottom:6px}
+.section{padding:18px 0}
+.section-title{display:flex; justify-content:space-between; align-items:end; gap:16px; margin-bottom:18px}
+.section-title h2{margin:0; font-size:clamp(1.4rem,3vw,2.2rem)}
+.section-title p{margin:0; color:var(--muted); max-width:54ch}
+.grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
 .card{
   position:relative;
   overflow:hidden;
+  padding:22px;
+  border-radius:24px;
   background:var(--panel);
-  backdrop-filter: blur(6px);
   border:1px solid var(--line);
-  border-radius:18px;
-  padding:20px;
-  margin:14px 0;
-  box-shadow:0 10px 30px #00000030;
+  backdrop-filter:blur(18px);
+  box-shadow:var(--shadow);
 }
 .card::before{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,.06),transparent);
-  transform:translateX(-120%);
-  transition:transform .8s ease;
+  background:linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
+  transform:translateX(-140%);
+  transition:transform .9s ease;
 }
-.card:hover::before{transform:translateX(120%)}
-.card h2{margin-top:0;font-size:1.2rem}
-.sub{color:var(--muted)}
-.hero-wrap{
-  margin:20px 0;
-  padding:10px;
-  border-radius:18px;
-  background:linear-gradient(130deg,#38bdf829,#7dd3fc14,#c084fc1f);
-  border:1px solid #ffffff2d;
+.card:hover::before{transform:translateX(140%)}
+.card h3{margin:0 0 10px; font-size:1.1rem}
+.card p{margin:0; color:var(--muted)}
+.pill-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px}
+.pill{padding:7px 11px; border-radius:999px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); color:#d9ecff; font-size:.88rem}
+.story{display:grid; grid-template-columns:1.05fr .95fr; gap:16px}
+.feature-list{display:grid; gap:14px}
+.feature{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start}
+.feature-num{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  font-weight:800;
+  color:#08111f;
+  background:linear-gradient(135deg, var(--cyan), #c9f8ff);
 }
-.hero{display:block;max-width:100%;max-height:600px;margin:0 auto;border-radius:12px}
-.cta-row{display:flex;flex-wrap:wrap;gap:10px}
-a.btn{
-  display:inline-block;
-  padding:11px 16px;
-  border-radius:12px;
-  background:linear-gradient(135deg,var(--accent),var(--accent-strong));
-  color:#081019;
-  font-weight:700;
-  text-decoration:none;
-  transition:transform .2s ease, box-shadow .2s ease;
-  box-shadow:0 8px 20px #38bdf84d;
+.panel-strong{background:var(--panel-strong)}
+.footer{padding:34px 0 46px; color:var(--muted); font-size:.92rem}
+@media (max-width:980px){.hero,.story,.grid-3{grid-template-columns:1fr}}
+@media (max-width:720px){
+  .site-nav-inner{padding:12px 0}
+  .nav-links{display:none}
+  .wrap{width:min(100% - 24px, 1180px)}
+  .hero{padding:28px 0 18px}
+  .hero-side{padding:14px}
+  .hero-stats{grid-template-columns:1fr}
+  .card{padding:18px}
 }
-a.btn:hover{transform:translateY(-1px);box-shadow:0 12px 26px #38bdf870}
-.meta{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;padding:0;list-style:none}
-.meta li{
-  padding:4px 10px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  color:#cdd6e3;
-  font-size:.85rem;
-  background:#ffffff0a;
-}
-.note-link{color:#9bdffc}
-@media (max-width:640px){
-  .wrap{padding:24px 14px 40px}
-  .card{padding:16px}
-}
-</style></head><body><div class="wrap">
-
-  <header class="hero-head">
-    <ul class="meta">
-      <li>4軸モデル</li>
-      <li>16分類図鑑</li>
-      <li>ブラウザ内完結</li>
-    </ul>
-    <h1>TDR 4軸｜性格診断と16分類図鑑</h1>
-    <p class="lead">「型にはめる」より「行き来できる自分」を育てるための診断です。</p>
-  </header>
-
-  <!-- ここにタイトル画像と説明を追加 -->
-  <div class="hero-wrap">
-    <img src="images/tdr-hero.png" alt="TDR 4-axis personality test" class="hero">
+</style>
+</head>
+<body>
+<header class="site-nav">
+  <div class="wrap site-nav-inner">
+    <div class="brand">TDR 4AXIS</div>
+    <nav class="nav-links">
+      <a href="#about">診断の見どころ</a>
+      <a href="#flow">体験の流れ</a>
+      <a href="atlas/">16分類アトラス</a>
+      <a href="test/">診断スタート</a>
+    </nav>
   </div>
-  <div class="card">
-    <h2>診断の考え方</h2>
-    <p>
-      多くの性格診断は「あなたは〇〇タイプです」と枠を決めがちですが、<br>
-      本来、人はひとつの型に閉じ込められる存在ではありません。<br><br>
+</header>
 
-      この診断では <b>温度・深さ・硬さ・方向性</b> を「メタファー」として扱います。<br>
-      「私は熱いけど柔らかい」「冷静だけど深い」といった感覚で、自分を立体的にイメージできます。<br><br>
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">4つの軸で読む、あなたの可動域</div>
+      <h1>TDR 4軸性格診断</h1>
+      <p>内外、温度、深度、硬度の4軸をもとに、今の自分がどう動きやすいかを立体的に可視化する診断サイトです。静的サイトの軽さはそのままに、世界観ごと没入できる見た目へ引き上げます。</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="test/">診断をはじめる</a>
+        <a class="btn secondary" href="atlas/">16分類を眺める</a>
+      </div>
+      <div class="pill-row">
+        <span class="pill">全30問</span>
+        <span class="pill">16タイプ</span>
+        <span class="pill">結果から図鑑へ遷移</span>
+        <span class="pill">モバイル対応</span>
+      </div>
+    </div>
 
-      大事なのは「地続きに行き来できること」。<br>
-      「私は○○タイプだから仕方ない」ではなく、<br>
-      「今日は少し冷たく」「ここは柔らかく」と選べる感覚を持つことです。<br><br>
+    <div class="hero-side">
+      <div class="hero-visual">
+        <img src="images/tdr-hero.png" alt="TDR 4軸性格診断のキービジュアル">
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <strong>4</strong>
+          <span>感情だけでも論理だけでもない、4軸で立体的に判定</span>
+        </div>
+        <div class="stat">
+          <strong>16</strong>
+          <span>結果コードからそのままアトラスの各タイプへ接続</span>
+        </div>
+        <div class="stat">
+          <strong>∞</strong>
+          <span>中庸を含めた揺らぎも見せる、固定化しすぎない診断体験</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      この診断は分断ではなく <b>橋渡し</b> を意識しています。<br>
-      違うタイプを知ることは制限ではなく、むしろ <b>自分を拡張するヒント</b> になります。
-    </p>
-  </div>
+  <section id="about" class="section">
+    <div class="section-title">
+      <h2>見た目だけで終わらない、体験としての診断</h2>
+      <p>単なる色替えではなく、トップ、テスト、アトラスをひとつの物語としてつなぐ方向で強化できます。</p>
+    </div>
+    <div class="grid-3">
+      <article class="card">
+        <h3>世界観を統一</h3>
+        <p>夜空のような深い背景、発光するUI、ガラス調のカードで、診断サイト全体に一貫したムードを持たせます。</p>
+      </article>
+      <article class="card">
+        <h3>結果を視覚化</h3>
+        <p>数値バー、可動域、タイプコード、関連タイプをひと目で読めるレイアウトにして、納得感を上げます。</p>
+      </article>
+      <article class="card">
+        <h3>静的でもリッチ</h3>
+        <p>重いフレームワークを増やさず、HTML/CSS/JavaScriptだけで高級感のある演出に寄せられます。</p>
+      </article>
+    </div>
+  </section>
 
-  <div class="card">
-    <h2>はじめる</h2>
-    <p class="cta-row"><a class="btn" href="test/">診断を受ける</a><a class="btn" href="atlas/">16分類図鑑を見る</a></p>
-    <p class="sub">プライバシー：入力はブラウザ内のみで処理。サーバ送信なし。</p>
-    <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a>
-    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-  </div>
-  <div class="card">
-    <h2>モデルについて</h2>
-    <p class="sub">本診断はオリジナルの価値回路モデル（TDR）です。医学的・臨床的評価ではありません。<br>
-    製作者:zacky <a class="note-link" href="https://note.com/gentle_toucan642"target="_blank">noteはコチラ</a></p>
-  </div>
+  <section id="flow" class="section">
+    <div class="story">
+      <article class="card panel-strong">
+        <div class="section-title">
+          <h2>体験の流れ</h2>
+          <p>入口から結果まで、気持ちが切れない設計にしています。</p>
+        </div>
+        <div class="feature-list">
+          <div class="feature">
+            <div class="feature-num">01</div>
+            <div>
+              <h3>トップで世界観を掴む</h3>
+              <p>最初に診断の価値と空気感が伝わるよう、ヒーローと情報配置を整理します。</p>
+            </div>
+          </div>
+          <div class="feature">
+            <div class="feature-num">02</div>
+            <div>
+              <h3>テスト中は迷わない</h3>
+              <p>進捗、設問、レンジ入力、結果プレビューを一画面で見やすくし、離脱しづらくします。</p>
+            </div>
+          </div>
+          <div class="feature">
+            <div class="feature-num">03</div>
+            <div>
+              <h3>アトラスで深掘りする</h3>
+              <p>結果から16分類へ自然に流れ、他タイプも比較したくなる密度のある見た目に整えます。</p>
+            </div>
+          </div>
+        </div>
+      </article>
 
-</div></body></html> 
+      <article class="card">
+        <div class="section-title">
+          <h2>このサイトで伝わること</h2>
+          <p>「あなたはこのタイプです」で終わらせず、動き方の幅まで見える設計です。</p>
+        </div>
+        <div class="pill-row">
+          <span class="pill">I / E</span>
+          <span class="pill">Cool / Hot</span>
+          <span class="pill">Shallow / Deep</span>
+          <span class="pill">Flexible / Rigid</span>
+        </div>
+        <p style="margin-top:16px;color:var(--muted);">今のリポジトリ構成なら、画像やタイプデータを活かしながらかなりリッチにできます。今回の調整では、既存アセットを使って印象と読みやすさの両方を上げます。</p>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap footer">
+  TDRはオリジナルの4軸モデルです。診断ページと16分類アトラスを行き来しながら、自分の現在地と周辺タイプを立体的に読めます。
+</footer>
+</body>
+</html>
