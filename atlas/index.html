@@ -207,6 +207,7 @@ a{color:inherit}
   border:1px solid rgba(255,255,255,.08);
 }
 .adjust strong{display:block; margin-bottom:6px; color:#d9efff}
+.adjust-note{margin-top:14px; color:var(--muted); font-size:.88rem; line-height:1.6}
 .to-top{
   position:fixed;
   right:18px;
@@ -257,7 +258,7 @@ a{color:inherit}
 
   <div id="filterBar" class="filterbar">
     <div class="row">
-      <label>I / E</label>
+      <label>内外</label>
       <select data-axis="ie">
         <option value="M">すべて</option>
         <option value="I">I</option>
@@ -265,7 +266,7 @@ a{color:inherit}
       </select>
     </div>
     <div class="row">
-      <label>Temperature</label>
+      <label>温度</label>
       <select data-axis="t">
         <option value="M">すべて</option>
         <option value="C">C</option>
@@ -273,7 +274,7 @@ a{color:inherit}
       </select>
     </div>
     <div class="row">
-      <label>Depth</label>
+      <label>深さ</label>
       <select data-axis="d">
         <option value="M">すべて</option>
         <option value="S">S</option>
@@ -281,7 +282,7 @@ a{color:inherit}
       </select>
     </div>
     <div class="row">
-      <label>Rigidity</label>
+      <label>硬さ</label>
       <select data-axis="r">
         <option value="M">すべて</option>
         <option value="F">F</option>
@@ -356,6 +357,7 @@ function renderDetails(list){
           </div>
           <div>
             ${longdesc ? `<div class="longdesc">${longdesc}</div>` : ""}
+            <div class="adjust-note">今の傾向から少し反対側へ寄せたいときのヒントです。</div>
             <div class="adjusts">
               <div class="adjust"><strong>内向 / 外向の調整</strong>${adjust["I/E"] || "-"}</div>
               <div class="adjust"><strong>冷静さ / 熱量の調整</strong>${adjust["H/C"] || "-"}</div>
@@ -475,6 +477,12 @@ function setupFilter(types){
 </script>
 </body>
 </html>
+
+
+
+
+
+
 
 
 

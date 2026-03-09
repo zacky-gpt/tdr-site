@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TDR 4軸性格診断テスト</title>
-<meta name="description" content="温度・深度・硬度・内外の4軸で可動域を測るTDR式診断テスト。全30問、結果から16分類アトラスへ接続します。">
+<meta name="description" content="温度・深さ・硬さ・内外の4軸で可動域を測るTDR式診断テスト。全30問、結果から16分類アトラスへ接続します。">
 <meta property="og:title" content="TDR 4軸性格診断テスト">
 <meta property="og:description" content="全30問で動かせる自分を見つけるTDR式診断。">
 <meta property="og:type" content="website">
@@ -279,22 +279,22 @@ a{color:inherit}
       <div id="tags" class="tags"></div>
 
       <div class="axis">
-        <div class="axis-head"><span>I / E</span><span>中心 <span id="n0">-</span> / 幅 <span id="r0">-</span></span></div>
+        <div class="axis-head"><span>内外</span><span>中心 <span id="n0">-</span> / 幅 <span id="r0">-</span></span></div>
         <div class="barwrap"><div id="b0" class="bar"></div></div>
         <div class="rng"><span id="rg0" style="left:0;width:0"></span></div>
       </div>
       <div class="axis">
-        <div class="axis-head"><span>Temperature</span><span>中心 <span id="n1">-</span> / 幅 <span id="r1">-</span></span></div>
+        <div class="axis-head"><span>温度</span><span>中心 <span id="n1">-</span> / 幅 <span id="r1">-</span></span></div>
         <div class="barwrap"><div id="b1" class="bar t"></div></div>
         <div class="rng"><span id="rg1" style="left:0;width:0"></span></div>
       </div>
       <div class="axis">
-        <div class="axis-head"><span>Depth</span><span>中心 <span id="n2">-</span> / 幅 <span id="r2">-</span></span></div>
+        <div class="axis-head"><span>深さ</span><span>中心 <span id="n2">-</span> / 幅 <span id="r2">-</span></span></div>
         <div class="barwrap"><div id="b2" class="bar d"></div></div>
         <div class="rng"><span id="rg2" style="left:0;width:0"></span></div>
       </div>
       <div class="axis">
-        <div class="axis-head"><span>Rigidity</span><span>中心 <span id="n3">-</span> / 幅 <span id="r3">-</span></span></div>
+        <div class="axis-head"><span>硬さ</span><span>中心 <span id="n3">-</span> / 幅 <span id="r3">-</span></span></div>
         <div class="barwrap"><div id="b3" class="bar r"></div></div>
         <div class="rng"><span id="rg3" style="left:0;width:0"></span></div>
       </div>
@@ -489,14 +489,21 @@ function run(){
 }
 
 function titleFromLetters(ie, t, d, r){
-  if (ie === "E" && t === "H" && d === "D") return "灼熱の旗手";
-  if (ie === "E" && t === "H" && d === "S") return "奔流の開拓者";
-  if (ie === "I" && t === "C" && d === "D" && r === "R") return "静謐の守護者";
-  if (ie === "I" && t === "C" && d === "D") return "冷き深海の思索者";
-  if (t === "C" && r === "F") return "しなる風の調停者";
-  if (d === "D" && r === "F") return "柔らかな賢者";
-  if (d === "S" && r === "R") return "鋭刃のスプリンター";
-  return "中庸の航海者";
+  if (![ie, t, d, r].includes("M")) {
+    if (ie === "E" && t === "H" && d === "D") return "灼熱の旗手";
+    if (ie === "E" && t === "H" && d === "S") return "奔流の開拓者";
+    if (ie === "I" && t === "C" && d === "D" && r === "R") return "静謐の守護者";
+    if (ie === "I" && t === "C" && d === "D") return "冷き深海の思索者";
+    if (t === "C" && r === "F") return "しなる風の調停者";
+    if (d === "D" && r === "F") return "柔らかな賢者";
+    if (d === "S" && r === "R") return "鋭刃のスプリンター";
+  }
+
+  const tone = t === "H" ? "熱を帯びた" : t === "C" ? "静かな" : "揺らぎを持つ";
+  const depth = d === "D" ? "深層" : d === "S" ? "軽やか" : "境界";
+  const role = r === "R" ? "設計者" : r === "F" ? "遊動者" : "調律者";
+  const direction = ie === "I" ? "内省型" : ie === "E" ? "発信型" : "往還型";
+  return `${tone} ${depth}の${role}` + ` (${direction})`;
 }
 
 function descFromLetters(ie, t, d, r){
@@ -610,6 +617,9 @@ renderPage();
 </script>
 </body>
 </html>
+
+
+
 
 
 
