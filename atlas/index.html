@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
@@ -14,236 +14,19 @@
 <meta name="twitter:description" content="16タイプを一覧し、フィルタと比較で深掘りできるTDRアトラス。">
 <meta name="twitter:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png">
 <link rel="icon" href="../favicon.ico" type="image/x-icon">
-<style>
-:root{
-  --bg:#07111f;
-  --panel:rgba(8,17,33,.74);
-  --panel-strong:rgba(12,24,46,.9);
-  --line:rgba(255,255,255,.12);
-  --line-strong:rgba(142,210,255,.35);
-  --text:#eff7ff;
-  --muted:#a9bdd4;
-  --cyan:#74e1ff;
-  --gold:#ffd47a;
-  --rose:#ff8fc3;
-  --shadow:0 24px 60px rgba(0,0,0,.35);
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  color:var(--text);
-  font-family:"Yu Gothic UI","Hiragino Sans","Noto Sans JP",sans-serif;
-  line-height:1.7;
-  background:
-    radial-gradient(circle at 12% 12%, rgba(116,225,255,.18), transparent 26%),
-    radial-gradient(circle at 86% 10%, rgba(255,143,195,.14), transparent 24%),
-    linear-gradient(180deg, #08111f 0%, #0d1830 44%, #091221 100%);
-}
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  background-image:
-    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-  background-size:30px 30px;
-  mask-image:linear-gradient(180deg, rgba(255,255,255,.45), transparent 80%);
-}
-a{color:inherit}
-.wrap{width:min(1200px, calc(100% - 32px)); margin:0 auto; padding:24px 0 48px}
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  margin-bottom:16px;
-}
-.topbar a{text-decoration:none; color:var(--muted)}
-.topbar a:hover{color:var(--text)}
-.hero{
-  position:relative;
-  overflow:hidden;
-  padding:28px;
-  border-radius:28px;
-  background:linear-gradient(155deg, rgba(8,17,33,.92), rgba(18,38,68,.72));
-  border:1px solid var(--line);
-  box-shadow:var(--shadow);
-}
-.hero::before{
-  content:"";
-  position:absolute;
-  inset:-20% auto auto 65%;
-  width:240px;
-  height:240px;
-  background:radial-gradient(circle, rgba(255,212,122,.22), transparent 70%);
-}
-.eyebrow{
-  display:inline-flex;
-  padding:8px 14px;
-  border-radius:999px;
-  background:rgba(116,225,255,.08);
-  border:1px solid rgba(116,225,255,.2);
-  color:#c9f5ff;
-  font-size:.86rem;
-}
-.hero h1{
-  margin:18px 0 10px;
-  font-family:"Yu Mincho","Hiragino Mincho ProN","MS PMincho",serif;
-  font-size:clamp(2rem, 5vw, 3.6rem);
-  line-height:1.1;
-}
-.hero p{margin:0; color:var(--muted); max-width:68ch}
-.chip-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(96px,1fr)); gap:10px; margin-top:20px}
-.chip{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:54px;
-  text-decoration:none;
-  border-radius:16px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.1);
-  font-weight:800;
-  letter-spacing:.06em;
-  transition:transform .2s ease,border-color .2s ease,background .2s ease;
-}
-.chip:hover{transform:translateY(-2px); border-color:var(--line-strong); background:rgba(255,255,255,.08)}
-.filterbar{
-  position:sticky;
-  top:14px;
-  z-index:10;
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  align-items:center;
-  margin:18px 0;
-  padding:14px;
-  border-radius:20px;
-  background:rgba(8,17,33,.76);
-  border:1px solid var(--line);
-  backdrop-filter:blur(18px);
-  box-shadow:var(--shadow);
-}
-.filterbar .row{display:flex; flex-direction:column; gap:6px; min-width:120px}
-.filterbar label{font-size:12px; color:var(--muted); letter-spacing:.06em}
-.filterbar select{
-  min-height:42px;
-  padding:0 12px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.14);
-  background:#08111f;
-  color:var(--text);
-}
-.filterbar button{
-  min-height:42px;
-  padding:0 14px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.14);
-  background:rgba(255,255,255,.05);
-  color:var(--text);
-  cursor:pointer;
-}
-.filterbar button:hover{border-color:var(--line-strong)}
-.filterbar .count{margin-left:auto; color:var(--muted)}
-.list{display:grid; gap:16px}
-.card{
-  position:relative;
-  overflow:hidden;
-  padding:22px;
-  border-radius:24px;
-  background:var(--panel);
-  border:1px solid var(--line);
-  backdrop-filter:blur(18px);
-  box-shadow:var(--shadow);
-}
-.card::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
-  transform:translateX(-140%);
-  transition:transform .9s ease;
-  pointer-events:none;
-}
-.card:hover::before{transform:translateX(140%)}
-.card-head{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:14px; align-items:start}
-.name{font-size:clamp(1.2rem, 2.4vw, 1.55rem); font-weight:800}
-.code{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:8px 12px;
-  border-radius:999px;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.12);
-  font-weight:800;
-  letter-spacing:.08em;
-}
-.desc{margin-top:12px; color:#d5e7f7}
-.longdesc{margin-top:14px; color:var(--muted)}
-.meta{display:grid; grid-template-columns:minmax(280px,340px) minmax(0,1fr); gap:18px; margin-top:18px}
-.visual{
-  overflow:hidden;
-  border-radius:20px;
-  border:1px solid rgba(255,255,255,.1);
-  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
-  min-height:220px;
-}
-.visual img{display:block; width:100%; height:100%; object-fit:cover}
-.tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
-.tag{padding:6px 10px; border-radius:999px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); font-size:.88rem}
-.adjusts{
-  display:grid;
-  grid-template-columns:repeat(2, minmax(0,1fr));
-  gap:10px;
-  margin-top:14px;
-}
-.adjust{
-  padding:14px;
-  border-radius:18px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-}
-.adjust strong{display:block; margin-bottom:6px; color:#d9efff}
-.adjust-note{margin-top:14px; color:var(--muted); font-size:.88rem; line-height:1.6}
-.to-top{
-  position:fixed;
-  right:18px;
-  bottom:18px;
-  z-index:20;
-  min-width:54px;
-  min-height:54px;
-  border:none;
-  border-radius:999px;
-  background:linear-gradient(135deg, var(--gold), #fff0c0 48%, var(--cyan));
-  color:#08111f;
-  font-weight:800;
-  box-shadow:var(--shadow);
-  cursor:pointer;
-  opacity:0;
-  pointer-events:none;
-  transform:translateY(8px);
-  transition:opacity .2s ease, transform .2s ease;
-}
-.to-top.show{opacity:1; pointer-events:auto; transform:translateY(0)}
-.foot{margin-top:16px; color:var(--muted); font-size:.9rem}
-@media (max-width:900px){
-  .meta{grid-template-columns:1fr}
-}
-@media (max-width:720px){
-  .wrap{width:min(100% - 24px, 1200px); padding-top:18px}
-  .hero,.card{padding:18px}
-  .topbar{flex-direction:column; align-items:flex-start}
-  .filterbar .count{margin-left:0}
-  .adjusts{grid-template-columns:1fr}
-  .card-head{grid-template-columns:1fr}
-}
-</style>
+<link rel="stylesheet" href="../assets/site.css">
 </head>
-<body>
-<div class="wrap">
+<body class="inner-page atlas-page">
+<a class="skip-link" href="#main">本文へ移動</a>
+<header class="site-nav"><div class="wrap site-nav-inner">
+  <a class="brand" href="../" aria-label="TDR トップ"><span class="brand-mark" aria-hidden="true">✧</span><span>TDR<small>PERSONALITY ATLAS</small></span></a>
+  <nav class="nav-links" aria-label="メインナビゲーション">
+    <a class="desktop-link" href="../#about">TDRについて</a>
+    <a href="../atlas/" aria-current="page">タイプ図鑑</a>
+    <a class="nav-cta" href="../test/" >診断する <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<div class="wrap" id="main">
   <div class="topbar">
     <a href="../">← トップへ戻る</a>
     <a href="../test/">診断を受ける →</a>
@@ -251,50 +34,50 @@ a{color:inherit}
 
   <section class="hero">
     <div class="eyebrow">Atlas of 16 Types</div>
-    <h1>TDR 16分類アトラス</h1>
+    <h1>16の個性をめぐる、タイプ図鑑。</h1>
     <p>診断結果から各タイプを深掘りするための一覧ページです。ひとつのタイプだけでなく、近いタイプや対照的なタイプまで見比べながら、自分の波長の位置を確かめられます。</p>
-    <nav id="grid" class="chip-grid"></nav>
+    <nav id="grid" class="chip-grid" aria-label="キャラクターからタイプを探す"></nav>
   </section>
 
   <div id="filterBar" class="filterbar">
     <div class="row">
-      <label>内外</label>
-      <select data-axis="ie">
+      <label for="filter-ie">内外</label>
+      <select id="filter-ie" data-axis="ie">
         <option value="M">すべて</option>
-        <option value="I">I</option>
-        <option value="E">E</option>
+        <option value="I">内向 I</option>
+        <option value="E">外向 E</option>
       </select>
     </div>
     <div class="row">
-      <label>温度</label>
-      <select data-axis="t">
+      <label for="filter-t">温度</label>
+      <select id="filter-t" data-axis="t">
         <option value="M">すべて</option>
-        <option value="C">C</option>
-        <option value="H">H</option>
+        <option value="C">冷静 C</option>
+        <option value="H">熱量 H</option>
       </select>
     </div>
     <div class="row">
-      <label>深さ</label>
-      <select data-axis="d">
+      <label for="filter-d">深さ</label>
+      <select id="filter-d" data-axis="d">
         <option value="M">すべて</option>
-        <option value="S">S</option>
-        <option value="D">D</option>
+        <option value="S">浅さ S</option>
+        <option value="D">深さ D</option>
       </select>
     </div>
     <div class="row">
-      <label>硬さ</label>
-      <select data-axis="r">
+      <label for="filter-r">硬さ</label>
+      <select id="filter-r" data-axis="r">
         <option value="M">すべて</option>
-        <option value="F">F</option>
-        <option value="R">R</option>
+        <option value="F">柔軟 F</option>
+        <option value="R">構造 R</option>
       </select>
     </div>
     <button id="resetFilter" type="button">リセット</button>
-    <div class="count"><span id="hitCount">16</span> / 16 types</div>
+    <div class="count" role="status"><span id="hitCount">16</span> / 16 types</div>
   </div>
 
   <main id="details" class="list"></main>
-  
+
 </div>
 
 <button id="toTop" class="to-top" type="button">TOP</button>
@@ -449,7 +232,7 @@ function setupFilter(types){
     types.sort((a, b) => (a.code || a.name).localeCompare(b.code || b.name, "ja"));
 
     document.getElementById("grid").innerHTML = types.map((type) => `
-      <a class="chip" href="#${type.code || type.id}">${type.code || type.id}</a>
+      <a class="chip" href="#${type.code || type.id}"><img src="${resolveImg(type.img)}" alt="" width="328" height="493" loading="lazy"><span>${type.code || type.id}</span><small>${type.name}</small></a>
     `).join("");
 
     setupFilter(types);
@@ -458,10 +241,14 @@ function setupFilter(types){
       anchor.addEventListener("click", (event) => {
         const id = anchor.getAttribute("href");
         const el = document.querySelector(id);
-        if (!el) return;
+        if (!el) {
+          document.getElementById("resetFilter").click();
+        }
+        const target = document.querySelector(id);
+        if (!target) return;
         event.preventDefault();
         history.replaceState(null, "", id);
-        el.scrollIntoView({ behavior:"smooth", block:"start" });
+        target.scrollIntoView({ behavior:"smooth", block:"start" });
       });
     });
 
@@ -477,16 +264,3 @@ function setupFilter(types){
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-

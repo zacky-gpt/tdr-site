@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
@@ -14,349 +14,64 @@
 <meta name="twitter:description" content="動かせる自分を見つける診断と16分類アトラス。">
 <meta name="twitter:image" content="https://zacky-gpt.github.io/tdr-site/assets/og.png">
 <link rel="icon" href="favicon.ico" type="image/x-icon">
-<style>
-:root{
-  --bg:#07111f;
-  --panel:rgba(8,17,33,.72);
-  --panel-strong:rgba(12,24,46,.9);
-  --line:rgba(255,255,255,.12);
-  --line-strong:rgba(142,210,255,.35);
-  --text:#eff7ff;
-  --muted:#a9bdd4;
-  --cyan:#74e1ff;
-  --gold:#ffd47a;
-  --rose:#ff8fc3;
-  --shadow:0 24px 60px rgba(0,0,0,.35);
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  color:var(--text);
-  font-family:"Yu Gothic UI","Hiragino Sans","Noto Sans JP",sans-serif;
-  background:
-    radial-gradient(circle at 12% 12%, rgba(116,225,255,.18), transparent 26%),
-    radial-gradient(circle at 86% 10%, rgba(255,143,195,.14), transparent 24%),
-    radial-gradient(circle at 50% 120%, rgba(255,212,122,.16), transparent 30%),
-    linear-gradient(180deg, #08111f 0%, #0d1830 44%, #091221 100%);
-  line-height:1.7;
-  min-height:100vh;
-}
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-  background-size:32px 32px;
-  mask-image:linear-gradient(180deg, rgba(255,255,255,.42), transparent 78%);
-  pointer-events:none;
-}
-a{color:inherit}
-.wrap{width:min(1180px, calc(100% - 32px)); margin:0 auto}
-.site-nav{
-  position:sticky;
-  top:0;
-  z-index:20;
-  backdrop-filter:blur(18px);
-  background:rgba(7,15,30,.62);
-  border-bottom:1px solid rgba(255,255,255,.08);
-}
-.site-nav-inner{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  padding:14px 0;
-}
-.brand{
-  font-family:"Yu Mincho","Hiragino Mincho ProN","MS PMincho",serif;
-  font-size:1.1rem;
-  letter-spacing:.14em;
-}
-.nav-links{display:flex; gap:10px; flex-wrap:wrap}
-.nav-links a{
-  text-decoration:none;
-  color:var(--muted);
-  padding:8px 12px;
-  border-radius:999px;
-  border:1px solid transparent;
-}
-.nav-links a:hover{color:var(--text); border-color:rgba(255,255,255,.12); background:rgba(255,255,255,.04)}
-.hero{
-  padding:56px 0 28px;
-  display:grid;
-  grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);
-  gap:28px;
-  align-items:center;
-}
-.eyebrow{
-  display:inline-flex;
-  gap:10px;
-  align-items:center;
-  padding:8px 14px;
-  border-radius:999px;
-  background:rgba(116,225,255,.08);
-  border:1px solid rgba(116,225,255,.18);
-  color:#c9f5ff;
-  font-size:.86rem;
-}
-.hero h1{
-  margin:18px 0 14px;
-  font-family:"Yu Mincho","Hiragino Mincho ProN","MS PMincho",serif;
-  font-size:clamp(2.4rem,6vw,4.9rem);
-  line-height:1.05;
-  letter-spacing:.04em;
-}
-.hero p{
-  margin:0;
-  max-width:62ch;
-  color:var(--muted);
-  font-size:1.05rem;
-}
-.hero-actions{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:24px;
-}
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  min-height:50px;
-  padding:0 18px;
-  border-radius:16px;
-  border:1px solid var(--line);
-  text-decoration:none;
-  font-weight:700;
-  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease,background .25s ease;
-}
-.btn.primary{
-  color:#08111f;
-  background:linear-gradient(135deg, var(--gold), #fff0c0 48%, var(--cyan));
-  box-shadow:0 18px 35px rgba(125,211,252,.22);
-  border-color:rgba(255,255,255,.28);
-}
-.btn.secondary{background:rgba(255,255,255,.04); color:var(--text)}
-.btn:hover{transform:translateY(-2px); border-color:var(--line-strong); box-shadow:var(--shadow)}
-.hero-side{
-  position:relative;
-  padding:18px;
-  border-radius:28px;
-  background:linear-gradient(160deg, rgba(8,17,33,.85), rgba(16,37,67,.7));
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.hero-side::before{
-  content:"";
-  position:absolute;
-  inset:-20% auto auto -15%;
-  width:220px;
-  height:220px;
-  background:radial-gradient(circle, rgba(116,225,255,.32), transparent 70%);
-}
-.hero-visual{
-  position:relative;
-  overflow:hidden;
-  border-radius:20px;
-  border:1px solid rgba(255,255,255,.12);
-  background:linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.02));
-}
-.hero-visual img{display:block; width:100%; height:auto}
-.hero-stats{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px}
-.stat{padding:14px; border-radius:18px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08)}
-.stat strong{display:block; font-size:1.6rem; line-height:1; margin-bottom:6px}
-.section{padding:18px 0}
-.section-title{display:flex; justify-content:space-between; align-items:end; gap:16px; margin-bottom:18px}
-.section-title h2{margin:0; font-size:clamp(1.4rem,3vw,2.2rem)}
-.section-title p{margin:0; color:var(--muted); max-width:54ch}
-.grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
-.card{
-  position:relative;
-  overflow:hidden;
-  padding:22px;
-  border-radius:24px;
-  background:var(--panel);
-  border:1px solid var(--line);
-  backdrop-filter:blur(18px);
-  box-shadow:var(--shadow);
-}
-.card::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(120deg, transparent, rgba(255,255,255,.08), transparent);
-  transform:translateX(-140%);
-  transition:transform .9s ease;
-}
-.card:hover::before{transform:translateX(140%)}
-.card h3{margin:0 0 10px; font-size:1.1rem}
-.card p{margin:0; color:var(--muted)}
-.pill-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px}
-.pill{padding:7px 11px; border-radius:999px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); color:#d9ecff; font-size:.88rem}
-.story{display:grid; grid-template-columns:1.05fr .95fr; gap:16px}
-.feature-list{display:grid; gap:14px}
-.feature{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start}
-.feature-num{
-  width:42px;
-  height:42px;
-  border-radius:14px;
-  display:grid;
-  place-items:center;
-  font-weight:800;
-  color:#08111f;
-  background:linear-gradient(135deg, var(--cyan), #c9f8ff);
-}
-.panel-strong{background:var(--panel-strong)}
-.footer{padding:34px 0 46px; color:var(--muted); font-size:.92rem}
-@media (max-width:980px){.hero,.story,.grid-3{grid-template-columns:1fr}}
-@media (max-width:720px){
-  .site-nav-inner{padding:12px 0}
-  .nav-links{display:none}
-  .wrap{width:min(100% - 24px, 1180px)}
-  .hero{padding:28px 0 18px}
-  .hero-side{padding:14px}
-  .hero-stats{grid-template-columns:1fr}
-  .card{padding:18px}
-}
-</style>
+<link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
-<header class="site-nav">
-  <div class="wrap site-nav-inner">
-    <div class="brand">TDR 4AXIS</div>
-    <nav class="nav-links">
-      <a href="#about">診断の見どころ</a>
-      <a href="#flow">診断の進み方</a>
-      <a href="atlas/">16分類アトラス</a>
-      <a href="test/">診断スタート</a>
-    </nav>
+<a class="skip-link" href="#main">本文へ移動</a>
+<header class="site-nav"><div class="wrap site-nav-inner">
+  <a class="brand" href="./" aria-label="TDR トップ"><span class="brand-mark" aria-hidden="true">✧</span><span>TDR<small>PERSONALITY ATLAS</small></span></a>
+  <nav class="nav-links" aria-label="メインナビゲーション">
+    <a class="desktop-link" href="#about">TDRについて</a>
+    <a href="atlas/" >タイプ図鑑</a>
+    <a class="nav-cta" href="test/" >診断する <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+<main id="main">
+  <div class="wrap">
+    <section class="home-hero" aria-labelledby="hero-title">
+      <div>
+        <div class="eyebrow">A little journey into yourself</div>
+        <h1 id="hero-title">まだ知らない、<br>自分の<em>輪郭</em>に<br>出会う旅。</h1>
+        <p class="hero-intro">あなたの内側には、どんな冒険者がいるだろう。<br>温度・深さ・硬さ・内外。4つの軸をたどって、<br>いまのあなたの思考と反応を読み解く性格診断。</p>
+        <div class="hero-actions"><a class="btn primary" href="test/">自分のタイプを見つける <span aria-hidden="true">↗</span></a><a class="btn secondary" href="atlas/">図鑑をひらく <span aria-hidden="true">→</span></a></div>
+        <p class="hero-note">全30問 · 直感で回答 · 登録不要</p>
+      </div>
+      <div class="hero-art" aria-label="TDRのキャラクターたち">
+        <div class="orbit" aria-hidden="true"></div><span class="art-spark" aria-hidden="true">✧</span>
+        <a class="specimen specimen-left" href="atlas/?type=I-CDR#I-CDR"><img src="images/i-cdr.png" alt="盾を持った静謐の守護者" width="328" height="493"><span class="specimen-code">I–CDR / GUARDIAN</span><strong>静謐の守護者</strong></a>
+        <a class="specimen specimen-main" href="atlas/?type=E-HSF#E-HSF"><img src="images/e-hsf.png" alt="旋風の冒険者のキャラクター" width="328" height="493" fetchpriority="high"><span class="specimen-code">E–HSF / ADVENTURER</span><strong>旋風の冒険者</strong></a>
+        <a class="specimen specimen-right" href="atlas/?type=I-HDF#I-HDF"><img src="images/i-hdf.png" alt="深紅の詩人のキャラクター" width="328" height="493"><span class="specimen-code">I–HDF / POET</span><strong>深紅の詩人</strong></a>
+        <div class="art-label">ひとつの名前では、語りきれないあなたへ。<span>16 CHARACTERS, ENDLESS POSSIBILITIES</span></div>
+      </div>
+    </section>
+    <div class="facts" aria-label="診断の特徴"><div class="fact"><strong>30</strong><span>の問い<small>QUESTIONS</small></span></div><div class="fact"><strong>4</strong><span>つの視点<small>PERSONALITY AXES</small></span></div><div class="fact"><strong>16</strong><span>のタイプ<small>YOUR POSSIBILITIES</small></span></div></div>
+    <section id="about" class="section">
+      <div class="section-heading"><div><span class="section-kicker">01 / The four axes</span><h2>4つの軸で、あなたをひもとく。</h2></div><p>性格をひとつに決めつけるのではなく、<br>いまの自分がどこにいるかを知るための、小さな地図です。</p></div>
+      <div class="axis-grid">
+        <article class="axis-card" style="--tint:#e1e9df;--ink:#496a56"><span class="axis-symbol" aria-hidden="true">↔</span><h3>内外<small>DIRECTION</small></h3><p>ひとりで深める時間と、人とつながる時間。力が湧くのは、どちらから？</p><div class="axis-poles"><span>内向 I</span><span>外向 E</span></div></article>
+        <article class="axis-card" style="--tint:#f2e4d9;--ink:#9d6349"><span class="axis-symbol" aria-hidden="true">☼</span><h3>温度<small>TEMPERATURE</small></h3><p>冷静に見つめるまなざしと、心を動かす情熱。あなたの反応の温度は？</p><div class="axis-poles"><span>冷静 C</span><span>熱量 H</span></div></article>
+        <article class="axis-card" style="--tint:#e0e9ea;--ink:#4c747e"><span class="axis-symbol" aria-hidden="true">≋</span><h3>深さ<small>DEPTH</small></h3><p>広く軽やかに試すか、じっくり掘り下げるか。思考の潜り方を見つめます。</p><div class="axis-poles"><span>浅さ S</span><span>深さ D</span></div></article>
+        <article class="axis-card" style="--tint:#eee8d3;--ink:#8b743c"><span class="axis-symbol" aria-hidden="true">◇</span><h3>硬さ<small>STRUCTURE</small></h3><p>流れに合わせて形を変えるか、筋道を立てるか。考え方のしなやかさを読みます。</p><div class="axis-poles"><span>柔軟 F</span><span>構造 R</span></div></article>
+      </div>
+    </section>
   </div>
-</header>
-
-<main class="wrap">
-  <section class="hero">
-    <div>
-      <div class="eyebrow">思考の波と反応の傾向を読む4軸診断</div>
-      <h1>TDR 4軸性格診断</h1>
-      <p>もともとは、思考のモードを温度・深さ・硬さで読む「魂読三軸」の発想から始まった診断です。そこに内外の軸を加えることで、考え方だけでなく、人との関わり方や動き方まで含めて4軸で読み解けるようにしました。</p>
-      <div class="hero-actions">
-        <a class="btn primary" href="test/">診断をはじめる</a>
-        <a class="btn secondary" href="atlas/">16分類を眺める</a>
-      </div>
-      <div class="pill-row">
-        <span class="pill">全30問</span>
-        <span class="pill">16タイプ</span>
-        <span class="pill">結果から図鑑へ遷移</span>
-        <span class="pill">モバイル対応</span>
-      </div>
+  <section class="atlas-preview section"><div class="wrap">
+    <div class="section-heading"><div><span class="section-kicker">02 / Meet the characters</span><h2>あなたに重なるのは、誰だろう。</h2></div><a class="text-link" href="atlas/">16タイプすべてを見る →</a></div>
+    <div class="preview-grid">
+      <a class="preview-card" href="atlas/?type=E-HDR#E-HDR"><img src="images/e-hdr.png" alt="灼熱の旗手" loading="lazy" width="328" height="493"><span class="section-kicker">E–HDR <span class="card-arrow">↗</span></span><h3>灼熱の旗手</h3><p>情熱を灯し、周囲を導く。</p></a>
+      <a class="preview-card" href="atlas/?type=I-CDF#I-CDF"><img src="images/i-cdf.png" alt="冷月の探求者" loading="lazy" width="328" height="493"><span class="section-kicker">I–CDF <span class="card-arrow">↗</span></span><h3>冷月の探求者</h3><p>静かな思索で、世界をひらく。</p></a>
+      <a class="preview-card" href="atlas/?type=E-HDF#E-HDF"><img src="images/e-hdf.png" alt="陽炎の即興家" loading="lazy" width="328" height="493"><span class="section-kicker">E–HDF <span class="card-arrow">↗</span></span><h3>陽炎の即興家</h3><p>ひらめきを、新しい形に。</p></a>
+      <a class="preview-card" href="atlas/?type=I-CSF#I-CSF"><img src="images/i-csf.png" alt="氷結の即興者" loading="lazy" width="328" height="493"><span class="section-kicker">I–CSF <span class="card-arrow">↗</span></span><h3>氷結の即興者</h3><p>静けさの中に、自由な発想。</p></a>
     </div>
-
-    <div class="hero-side">
-      <div class="hero-visual">
-        <img src="images/tdr-hero.png" alt="TDR 4軸性格診断のキービジュアル">
-      </div>
-      <div class="hero-stats">
-        <div class="stat">
-          <strong>4</strong>
-          <span>思考の熱量、深さ、構造、内外の向きまでまとめて読む</span>
-        </div>
-        <div class="stat">
-          <strong>16</strong>
-          <span>結果から近いタイプや別方向のタイプへそのまま広げられる</span>
-        </div>
-        <div class="stat">
-          <strong>∞</strong>
-          <span>中庸や揺らぎも含めて、ひとつに決めつけずに見られる</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="about" class="section">
-    <div class="section-title">
-      <h2>この診断でわかること</h2>
-      <p>この診断は、性格を固定的なラベルで決めるためのものではなく、そのときの思考や反応のモードを読むためのものです。4軸で結果を見ることで、自分がどんな波長を持ちやすいかを立体的にたどれます。</p>
-    </div>
-    <div class="grid-3">
-      <article class="card">
-        <h3>自分の傾向が見える</h3>
-        <p>内外、熱量、深さ、構造の出方をまとめて見ることで、自分の思考や反応の偏りをバランスとして眺められます。</p>
-      </article>
-      <article class="card">
-        <h3>結果から広げられる</h3>
-        <p>ひとつのタイプ名だけで終わらず、中庸を含む近いタイプまで見比べながら、自分の輪郭を少しずつ深められます。</p>
-      </article>
-      <article class="card">
-        <h3>気軽に試しやすい</h3>
-        <p>直感で答えやすい形にしているので、はじめてでも入りやすく、あとから結果をゆっくり読み返せます。</p>
-      </article>
-    </div>
-  </section>
-
-  <section id="flow" class="section">
-    <div class="story">
-      <article class="card panel-strong">
-        <div class="section-title">
-          <h2>診断の進み方</h2>
-          <p>三軸の発想をベースにしながら、4軸の結果として自然に受け取れる流れで読めるようにしています。</p>
-        </div>
-        <div class="feature-list">
-          <div class="feature">
-            <div class="feature-num">01</div>
-            <div>
-              <h3>まずは診断の特徴を知る</h3>
-              <p>最初に、この診断が何を測ろうとしているのかを短くつかめます。</p>
-            </div>
-          </div>
-          <div class="feature">
-            <div class="feature-num">02</div>
-            <div>
-              <h3>質問に沿って答える</h3>
-              <p>30問に答えていく中で、いまの自分がどんなモードに寄りやすいかが少しずつ見えてきます。</p>
-            </div>
-          </div>
-          <div class="feature">
-            <div class="feature-num">03</div>
-            <div>
-              <h3>結果をアトラスで深める</h3>
-              <p>診断結果を起点に、近いタイプや対照的なタイプまで見比べながら、自分の波長を立体的に読めます。</p>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="section-title">
-          <h2>結果の読み方</h2>
-          <p>タイプ名だけでなく、どの軸が強く出ているか、中庸がどこにあるかまで含めて読めます。</p>
-        </div>
-        <div class="pill-row">
-          <span class="pill">内外</span>
-          <span class="pill">冷静さ / 熱量</span>
-          <span class="pill">浅さ / 深さ</span>
-          <span class="pill">柔軟さ / 構造</span>
-        </div>
-        <p style="margin-top:16px;color:var(--muted);">結果は固定的なラベルではなく、そのときの思考や反応の波長として読むのがおすすめです。</p>
-      </article>
-    </div>
-  </section>
+  </div></section>
+  <div class="wrap">
+    <section id="flow" class="section">
+      <div class="section-heading"><div><span class="section-kicker">03 / Your journey</span><h2>自分に出会う、3つのステップ。</h2></div></div>
+      <div class="journey"><article><span class="step-no">01</span><h3>直感で、答える。</h3><p>30の問いに、スライダーで回答。正解はありません。いまの自分に近い位置を選びましょう。</p></article><article><span class="step-no">02</span><h3>自分の輪郭を、眺める。</h3><p>4つの軸のバランスから、思考と反応の傾向へ。中間や揺らぎも、あなたらしさの一部です。</p></article><article><span class="step-no">03</span><h3>図鑑で、世界を広げる。</h3><p>近いタイプや対照的なタイプを見比べて。いつもと少し違う自分へのヒントが見つかります。</p></article></div>
+    </section>
+    <section class="closing"><h2>今日のあなたは、どんなあなた？</h2><p>少し立ち止まって、自分の内側をのぞいてみよう。</p><a class="btn primary" href="test/">診断の旅をはじめる <span aria-hidden="true">↗</span></a></section>
+  </div>
 </main>
-
-<footer class="wrap footer">
-  TDRは、魂読三軸の発想をもとに内外の軸を加えて広げたオリジナルの4軸モデルです。診断とアトラスを行き来しながら、自分の現在地とその周辺にある波長を立体的に読めます。<br>この診断は、性格をひとつに決めるためのものではなく、そのときの思考や反応の傾向を読むためのヒントです。
-</footer>
+<footer class="footer"><div class="wrap footer-inner"><div class="brand">TDR<small>PERSONALITY ATLAS</small></div><div><p>TDRは「魂読三軸」の発想に内外の軸を加えた、オリジナルの4軸モデルです。性格を固定するものではなく、そのときの思考や反応の傾向を読み解くヒントとしてお楽しみください。</p><small>TDR / A FIELD GUIDE TO YOURSELF</small></div></div></footer>
 </body>
 </html>
-
-
-
-
-
-
-
-
